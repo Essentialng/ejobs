@@ -15,7 +15,7 @@ function SearchByCategory() {
   const allJobs = useSelector(state=>state.jobListSlice.jobList)
   const [searchData, setSearchData] = useState({})
   const [filteredJobs, setFilteredJobs] = useState([])
-
+  const [viewedJob, setViewedJob] = useState(allJobs)
 
   // --------- states--------------
   const [categoryJob, setCategoryJob] = useState(null)
@@ -25,33 +25,19 @@ function SearchByCategory() {
     setSearchData({...searchData, [e.target.name]: e.target.value})
   }
   
-  // const handleSearch = (e)=>{
-  //   e.preventDefault()
-  //   const applyFilter = allJobs.filter((eachJob)=>{
-  //     return (
-  //     (searchData.jobList &&
-  //     eachJob.jobTitle.toLowerCase() === searchData.jobTitle.toLowerCase()) && 
-  //     (searchData.industry && eachJob.industry.toLowerCase() === searchData.industry.toLowerCase()) && 
-  //     (searchData.state && eachJob.state.toLowerCase() === searchData.state.toLowerCase()) &&
-  //     (searchData.workType && eachJob.workType.toLowerCase() === searchData.workType.toLowerCase())
-  //   )})
-  //   console.log({fil: applyFilter})
-  // }
-
   const handleSearch = (e) => {
     e.preventDefault();
     const applyFilter = allJobs.filter((eachJob) => {
       return (
         (!searchData.jobTitle || eachJob.jobTitle.toLowerCase().includes(searchData.jobTitle.toLowerCase())) &&
-        (!searchData.industry || eachJob.industry.toLowerCase().includes(searchData.industry.toLowerCase())) &&
-        (!searchData.state || eachJob.state.toLowerCase().includes(searchData.state.toLowerCase())) &&
+        (!searchData.industry || eachJob.industry.toLowerCase() === searchData.industry.toLowerCase()) &&
+        (!searchData.state || eachJob.state.toLowerCase() === searchData.state.toLowerCase()) &&
         (!searchData.workType || eachJob.workType.toLowerCase() === searchData.workType.toLowerCase())
       );
     });
-    console.log({first: filteredJobs})
     setFilteredJobs(applyFilter);
+    console.log({ filteredJobs: applyFilter });
   };
-
 
   return (
     <div className="">
