@@ -1,0 +1,621 @@
+### ------Company signup------
+POST http://localhost:3003/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "companyName":"Galapagous united",
+    "email":"GalapagousUnited@gmail.com",
+    "password":"123456",
+    "address":"plot 12b industrial estate ota",
+    "state":"Ogun State",
+    "localGovernment":"Ado odo ota",
+    "country":"Nigeria",
+    "phoneNumber":"8123280394",
+    "userType":"jobEmployer"
+}
+
+
+### ----Job seeker signup-----
+POST http://localhost:3003/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "firstName":"Muhammed",
+    "lastName":"Musa",
+    "email":"muhammed@gmail.com",
+    "password":"123456",
+    "address":"plot 12b industrial estate ota",
+    "state":"Kwara",
+    "localGovernment":"Edu",
+    "country":"Nigeria",
+    "gender":"male",
+    "phoneNumber":"8123280394",
+    "userType":"jobSeeker"
+}
+
+### ----sign in-----
+POST http://loPcalhost:3003/api/v1/auth/signin
+Content-Type: application/json
+
+{
+    "email":"muhammed@gmail.com",
+    "password":"123456"
+}
+
+
+### -----test-------
+POST http://localhost:3003/api/v1/jobseeker/allJobSeeker
+Content-Type: application/json
+
+{
+    "username":"galapagous",
+    "password":"123456"
+}
+
+
+### -----get a job-------
+GET http://localhost:3003/api/v1/job/getAjob/66647c95fb6583fc599cb2c8
+
+
+### -------Test API----------
+GET http://localhost:3003
+
+
+### -----get all job-------
+GET http://localhost:3003/api/v1/job/allJob
+
+
+
+### -----filter job-------
+POST http://localhost:3003/api/v1/job/search
+Content-Type: application/json
+
+{
+    "workType":"Full-Time"
+}
+
+
+### -----Create a job-945------
+POST http://localhost:3003/api/v1/job/createJob
+Content-Type: application/json
+
+{
+    "jobType":"Part time",
+    "jobTitle":"Frontend developer",
+    "jobFunction":"IT",
+    "employer":"6660045ab17400deaaa6aca1",
+    "industry":"FMCG",
+    "localGovernment":"ikeja",
+    "minimumQualification":"degree",
+    "workType":"full time",
+    "experienceLength":"1-2yr",
+    "jobLevel":"entry",
+    "currency":"Naira",
+    "salary":"120,000 - 250,000",
+    "state":"lagos",
+    "vacancyDuration":"10 days",
+    "numberOfOpenings":"10",
+    "jobDescription":"Develop and host fullstack application on the web",
+    "jobSummary":"Develop build and host application on the web using latest industry standard technology"
+}
+
+
+###---------Apply for a job-------------
+
+
+
+###---------Create an Application-------
+POST http://localhost:3003/api/v1/application/createApplication
+Content-Type: application/json
+
+{
+    "applicant": "6656a45bbcba788ccb4b708b",
+    "job":"6665ba4a8f2032c08e01e004",
+    "availability": "Immediately",
+    "filename": "musa resume",
+    "coverLetter":"hello"
+}
+
+###---------Get an Application applicationId-------
+POST http://localhost:3003/api/v1/application/getAnApplication/
+Content-Type: application/json
+
+{
+    "jobId":"6686debdac81dae856ce9cac"
+}
+
+
+###---------Get an Application applicationId-------
+POST http://localhost:3003/api/v1/application/getApplicationByJobId/
+Content-Type: application/json
+
+{
+    "jobId":"6665ba4a8f2032c08e01e004"
+}
+
+
+
+###---------Get an Application by jobSeeker-------
+POST http://localhost:3003/api/v1/application/getUserApplication/
+Content-Type: application/json
+
+{
+    "applicantId":"665ccd015dcc08ef99826a29"
+}
+
+
+###---------Get all Application-------
+GET http://localhost:3003/api/v1/application/allApplication
+
+
+###---------Create an Application-------
+POST http://localhost:3003/api/v1/application/createApplication
+Content-Type: application/json
+
+{
+    "jobId":"6665bfb38f2032c08e01e010",
+    "applicantId":"6656a45bbcba788ccb4b708b",
+    "coverLetter":"I am excited to apply for the [Job Title] position at [Company's Name]. With my background in [Your Field or Major Skill], I bring strong [relevant skills] and proven experience in [briefly mention a relevant achievement or responsibility]. I am impressed by [specific reason related to the company or role] and am eager to contribute to your team. Thank you for considering my application. I look forward to discussing how my skills can benefit [Company's Name].",
+    "availability":"Available to start immediately",
+    "resume":"job cv",
+    "additionalQuestionResponse":"3yrs experience with nodejs",
+    "companyName":"Cocacola",
+    "companyAddress":"KM 12 Asijire road Ibadan",
+    "position":"Automation engineer"
+}
+
+
+###---------Create an Application-------
+PUT http://localhost:3003/api/v1/application/updateApplication/66656355d2328864f21fb582
+Content-Type: application/json
+
+{
+    "status":"Shortlisted"
+}
+
+
+
+
+
+
+
+
+
+
+###---------Create an Application-------
+DELETE http://localhost:3003/api/v1/job/delete/:id
+
+
+###-------- create employer contact --------
+GET http://localhost:3003/api/v1/contactPerson/getDetails/6665d8f38f2032c08e01e03f
+
+
+###-------- create employer contact --------
+PUT http://localhost:3003/api/v1/contactPerson/updateContact/6665af9d1dbdb420dd4cac62
+Content-Type: application/json
+
+{
+    "firstName":"Wahab",
+    "phoneNumber":"+2349151781833"
+}
+
+
+###-------- create employer contact --------
+POST http://localhost:3003/api/v1/contactPerson/createContact
+Content-Type: application/json
+
+{
+    "companyId":"6660045ab17400deaaa6aca1",
+    "firstName":"Musa",
+    "lastName":"Muhammed",
+    "email":"musa@gmail.com",
+    "phoneNumber":"+23491545678",
+    "gender":"male",
+    "position":"Admin"
+}
+
+
+###-----------Education request--------------
+POST http://localhost:3003/api/v1/education/getUserEducation
+
+
+
+###-----------Education create--------------
+POST http://localhost:3003/api/v1/education/createUserEducation
+Content-Type: application/json
+
+{
+    "userId":"6656a45bbcba788ccb4b708b",
+    "school":"Obafemi awolowo univesit",
+    "course":"Animal science",
+    "state":"Osun state",
+    "country":"Nigeria",
+    "startYear":"12-12-2011",
+    "finishYear":"12-10-2011",
+    "certificate":"BEng"
+}
+
+
+
+###-----------Education getOne--------------
+POST http://localhost:3003/api/v1/education/getUserEducation
+Content-Type: application/json
+
+{
+    "educationId":"6667e1048662b2985549f10c"
+}
+
+
+###-----------Education request--------------
+PUT http://localhost:3003/api/v1/education/updateUserEducation
+Content-Type: application/json
+
+{
+    "educationId":"6667f30208652e3dadfc6955",
+    "country":"Tanzania",
+    "finishYear":"12-10-2014"
+}
+
+
+###-----------Education request--------------
+DELETE http://localhost:3003/api/v1/education/deleteUserEducation
+Content-Type: application/json
+
+{
+    "educationId":"6667f26408652e3dadfc694f"
+}
+
+
+###------------Education Section-------------------
+
+
+###-----------Create an Education--------------
+POST http://localhost:3003/api/v1/education/createUserEducation
+Content-Type: application/json
+
+{
+    "userId":"6656a45bbcba788ccb4b708b",
+    "school":"obafemi awolowo university",
+    "course":"electrical engineering",
+    "state":"osun",
+    "country":"Nigeria",
+    "startYear":"2011",
+    "finishYear":"2016",
+    "certificate":"MEng"
+}
+
+
+
+###-----------Update an Education--------------
+PUT http://localhost:3003/api/v1/education/updateUserEducation
+Content-Type: application/json
+
+{
+    "educationId":"66682f2a55833370a74f8793",
+    "school":"Federal University of Technology Minna",
+    "course":"electrical engineering",
+    "state":"Minna",
+    "country":"Nigeria",
+    "startYear":"2017",
+    "finishYear":"2018",
+    "certificate":"MEng"
+}
+
+
+
+###-----------Update an Education--------------
+DELETE http://localhost:3003/api/v1/education/deleteUserEducation
+Content-Type: application/json
+
+{
+    "educationId":"6667f30208652e3dadfc6955"
+    
+}
+
+
+###-----------Get an Education--------------
+POST http://localhost:3003/api/v1/education/getUserEducation
+Content-Type: application/json
+
+{
+    "educationId":"66682f2a55833370a74f8793"
+}
+
+
+###-----------Get an Education--------------
+POST http://localhost:3003/api/v1/education/getUserEducation
+Content-Type: application/json
+
+{
+    "educationId":"66682f2a55833370a74f8793"
+}
+
+
+
+###------------Work Experience Section-------------------
+
+
+###-----------Create an Experience--------------
+POST http://localhost:3003/api/v1/experience/createExperience
+Content-Type: application/json
+
+{
+    "userId":"6656a45bbcba788ccb4b708b",
+    "companyName":"Essential",
+    "companyAddress":"10 ayala street Allen Ikeja",
+    "positionHeld":"UI/UX",
+    "contactPerson":"Mr Adewale",
+    "contactPhone":"08123280399",
+    "salary":"10,000",
+    "startYear":"2010",
+    "finishYear":"2016",
+    "jobDescription":"Build ui interface as highlighted by cx"
+}
+
+
+
+###-----------Update an Experience--------------
+PUT http://localhost:3003/api/v1/experience/updateUserWork
+Content-Type: application/json
+
+{
+    "workId":"66685c44a6e0c8e7e48922d1",
+    "contactPerson":"Mr Mufutau"
+}
+
+
+
+###-----------Delete an experience--------------
+DELETE http://localhost:3003/api/v1/experience/deleteUserWork
+Content-Type: application/json
+
+{
+    "workId":"6668617e049bd3b78ea64873"
+}
+
+
+###-----------Get an Experience--------------
+POST http://localhost:3003/api/v1/experience/getUserWork
+Content-Type: application/json
+
+{
+    "workId":"66685c44a6e0c8e7e48922d1"
+}
+
+
+
+
+###------------Worker Certificate Section-------------------
+
+
+###-----------Create a Certificate--------------
+POST http://localhost:3003/api/v1/certificate/createUserCertificate
+Content-Type: application/json
+
+{
+    "userId":"6656a45bbcba788ccb4b708b",
+    "certificateName":"AZ 104",
+    "certificateIssuer":"Microsoft Azure",
+    "issueDate":"12-04-2019"
+    }
+
+
+
+###-----------Update an CertificateIssuer--------------
+PUT http://localhost:3003/api/v1/certificate/updateUserCertificate
+Content-Type: application/json
+
+{
+    "certificateId":"66688afa3bf57dabf6394260",
+    "certificateIssuer":"ISACAS"
+}
+
+
+
+###-----------Delete an CertificateIssuer--------------
+DELETE http://localhost:3003/api/v1/certificate/deleteUserCertificate
+Content-Type: application/json
+
+{
+    "certificateId":"66688afa3bf57dabf6394260"
+}
+
+
+###-----------Get a CertificateIssuer--------------
+POST http://localhost:3003/api/v1/certificate/getUserCertificate
+Content-Type: application/json
+
+{
+    "certificateId":"66688b243bf57dabf6394264"
+}
+
+
+
+###------------Worker Guarantor Section-------------------
+
+
+###-----------Create a Guaratntor--------------
+POST http://localhost:3003/api/v1/guarantor/createGuarantor
+Content-Type: application/json
+
+{
+    "userId":"6656a45bbcba788ccb4b708b",
+    "guarantorName":"Parwana",
+    "guarantorPhone":"+9923456345"
+    }
+
+
+
+###-----------Update a Guarantor--------------
+PUT http://localhost:3003/api/v1/guarantor/updateUserGuarantor
+Content-Type: application/json
+
+{
+    "guarantorName":"Abdul Waqas",
+    "guarantorId":"6668add756e91c4f5ca1abef"
+}
+
+
+
+###-----------Delete a Guarantor--------------
+DELETE http://localhost:3003/api/v1/guarantor/deleteUserGuarantor
+Content-Type: application/json
+
+{
+    "guarantorId":"6668add756e91c4f5ca1abef"
+}
+
+
+###-----------Get a Guarantor--------------
+POST http://localhost:3003/api/v1/guarantor/getUserGuarantor
+Content-Type: application/json
+
+{
+    "guarantorId":"6668add756e91c4f5ca1abef"
+}
+
+
+
+
+###-----------Update a job Seeker--------------
+PUT http://localhost:3003/api/v1/jobSeeker/updateJobSeeker
+Content-Type: application/json
+
+{
+    "jobSeekerId":"6656a45bbcba788ccb4b708b",
+    "phoneNumber":"09123456789"
+}
+
+
+
+###-----------Delete a job Seeker--------------
+DELETE http://localhost:3003/api/v1/guarantor/deleteUserGuarantor
+Content-Type: application/json
+
+{
+    "jobSeekerId":"6668add756e91c4f5ca1abef"
+}
+
+
+###-----------Get a Job Seeker--------------
+POST http://localhost:3003/api/v1/jobSeeker/getAjobSeeker
+Content-Type: application/json
+
+{
+    "jobSeekerId":"6656a45bbcba788ccb4b708b"
+}
+
+
+###------------Job Search section-------------------
+
+
+###-----------Create a Guaratntor--------------
+POST http://localhost:3003/api/v1/guarantor/createGuarantor
+Content-Type: application/json
+
+{
+    "userId":"6656a45bbcba788ccb4b708b",
+    "guarantorName":"Parwana",
+    "guarantorPhone":"+9923456345"
+    }
+
+
+
+###-----------Update a Guarantor--------------
+PUT http://localhost:3003/api/v1/guarantor/updateUserGuarantor
+Content-Type: application/json
+
+{
+    "guarantorName":"Abdul Waqas",
+    "guarantorId":"6668add756e91c4f5ca1abef"
+}
+
+
+
+###-----------Delete a Guarantor--------------
+DELETE http://localhost:3003/api/v1/guarantor/deleteUserGuarantor
+Content-Type: application/json
+
+{
+    "guarantorId":"6668add756e91c4f5ca1abef"
+}
+
+
+###-----------Get a Guarantor--------------
+POST http://localhost:3003/api/v1/guarantor/getUserGuarantor
+Content-Type: application/json
+
+{
+    "guarantorId":"6668add756e91c4f5ca1abef"
+}
+
+
+
+
+###-----------Update a job Seeker--------------
+PUT http://localhost:3003/api/v1/jobSeeker/updateJobSeeker
+Content-Type: application/json
+
+{
+    "jobSeekerId":"6656a45bbcba788ccb4b708b",
+    "phoneNumber":"09123456789"
+}
+
+
+
+###-----------Delete a job Seeker--------------
+DELETE http://localhost:3003/api/v1/guarantor/deleteUserGuarantor
+Content-Type: application/json
+
+{
+    "jobSeekerId":"6668add756e91c4f5ca1abef"
+}
+
+
+###-----------Get a Job Seeker--------------
+POST http://localhost:3003/api/v1/jobSeeker/getAjobSeeker
+Content-Type: application/json
+
+{
+    "jobSeekerId":"6656a45bbcba788ccb4b708b"
+}
+
+###-----------Interview route----------------
+POST http://localhost:3003/api/v1/interview/createInterview
+Content-Type: application/json
+
+{
+    "jobId":"6665ba4a8f2032c08e01e004",
+    "applicationId":"666b137ba4a72af229c93e05",
+    "companyName":"Heyett & Associates Limited",
+    "applicantName":"Wahab",
+    "typeOfInterview":"virtual",
+    "interviewDate":"2024-06-21",
+    "time":"04:03",
+    "additionalInformation":"Read about azure and app service",
+    "status":"pending"
+}
+
+
+### ----------Create a benefit
+POST http://localhost:3003/api/v1/benefit/
+Content-Type: application/json
+
+{
+    "amountRequested":"5000",
+    "applicantId": "12345"
+}
+
+
+### ----------Create a benefit
+POST http://localhost:3003/api/v1/benefit/
+Content-Type: application/json
+
+{
+    "amountRequested":"5000",
+    "applicantId": "12345"
+}
+
+
+### ----------Create a benefit
+GET http://localhost:3003/api/v1/employerReport/getAllEmployerReport
