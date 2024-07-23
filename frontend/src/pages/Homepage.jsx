@@ -4,7 +4,6 @@ import HomevideoComponent from "../component/HomevideoComponent";
 import ApplicationSteps from "../component/ApplicationSteps";
 import JobPostHomePage from "../component/JobPostHomePage";
 import AboutComponent from "../component/AboutComponent";
-import CategoryComponent from "../component/CategoryComponent";
 import ProductComponent from "../component/ProductComponent";
 import TestimonialComponent from "../component/TestimonialComponent";
 import StatisticsComponent from "../component/StatisticsComponent";
@@ -41,7 +40,6 @@ import Technology from '../assets/Images/technology.jpg'
 import Finance from '../assets/Images/finance.jpg'
 import Entertainment from '../assets/Images/entertainment2.jpg'
 import Entertainment2 from '../assets/Images/entertainment.jpg'
-import SampleImage from "../assets/Images/group.jpg";
 // import SampleImage2 from "../assets/Images/nightCompany.jpg";
 
 
@@ -62,6 +60,7 @@ import { workTypes } from "../assets/jobData";
 
 
 function Homepage() {
+  const apiRoute = process.env.REACT_APP_API_URL;
   const [currentTestimonial, setCUrrentTestimonial] = useState(0)
   const [currentJobpage, setCurrentJobPage] = useState("1");
   const loggedInUser = useSelector((state) => state.user);
@@ -69,11 +68,14 @@ function Homepage() {
   const [selectedJobs, setSelectedJobs] = useState([])
   const [activeJob, setActiveJob] = useState('recent')
   const allNotifications = useSelector(state=>state.notification.notificationList)
-  const allJobURL = "http://localhost:3003/api/v1/job/allJob";
+  const allJobURL = `${apiRoute}job/allJob`;
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({})
   const navigate = useNavigate()
   const searchSection = useRef()
+
+  // ---------Pagination data----------
+  const [paginatedJob, setPaginatedJob] = useState([]);
 
 
   // --------data-----------
@@ -82,6 +84,7 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
   // --------Fetch all jobs----------
   useEffect(() => {
     const fetchJobs = async () => {
+      console.log({first: process.env.REACT_APP_API_URL})
       dispatch(fetchingJobStart)
       try {
         const allJobs = await axios.get(allJobURL, {
@@ -115,6 +118,11 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
       ? setCurrentJobPage("3")
       : setCurrentJobPage(String(Number(currentJobpage) - 1));
   };
+
+  // ------------Pagination handler-------------
+  const handlePagination = ()=>{
+    
+  }
 
 
   // ------hanlde job filter----------
