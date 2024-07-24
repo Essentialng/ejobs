@@ -129,7 +129,6 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
     const paginatedData = currentJobs.slice(startIndex, endIndex)
-    console.log({first: paginatedData})
     setPaginatedJob(paginatedData)
   }
   // -----------------Pagination system---------------
