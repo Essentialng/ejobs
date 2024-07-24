@@ -61,7 +61,7 @@ function PostJob() {
   const [currentPrice, setCurrentPrice] = useState(null)
   const [categorySelection, setCategorySelection] = useState(null)
   const dispatch = useDispatch()
-  const baseURL = "http://localhost:3003/api/v1/job/createJob";
+  const baseURL = `${process.env.REACT_APP_API_URL}job/createJob`;
 
 
   useEffect(() => {

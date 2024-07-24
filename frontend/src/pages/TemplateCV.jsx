@@ -29,12 +29,12 @@ function TemplateCV() {
 
   // --------------API endpoints---------------
   const getEducation =
-    "http://localhost:3003/api/v1/education/getUserEducation";
-  const getExperience = "http://localhost:3003/api/v1/experience/getUserWork";
+    `${process.env.REACT_APP_API_URL}education/getUserEducation`;
+  const getExperience = `${process.env.REACT_APP_API_URL}experience/getUserWork`;
   const getCertificate =
-    "http://localhost:3003/api/v1/certificate/getUserCertificate";
+    `${process.env.REACT_APP_API_URL}certificate/getUserCertificate`;
   const getGuarantor =
-    "http://localhost:3003/api/v1/guarantor/getUserGuarantor";
+    `${process.env.REACT_APP_API_URL}guarantor/getUserGuarantor`;
 
   // -------------get user education------------
   useEffect(() => {

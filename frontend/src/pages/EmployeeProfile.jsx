@@ -14,16 +14,16 @@ import LoadSpinner from '../component/Modals/LoadSpinner';
 function EmployeeProfile({ education, experience, certificate, guarantor }) {
   const applicantId = useParams().applicantId
   const jobId = useParams().jobId
-  const getApplicantURL = "http://localhost:3003/api/v1/jobSeeker/getAjobSeeker"
+  const getApplicantURL = `${process.env.REACT_APP_API_URL}jobSeeker/getAjobSeeker`
   const [ApplicantData, setApplicantData] = useState({})
   const [educationList, setEducationList] = useState([])
   const [experienceList, setExperienceList] = useState([])
   const [certificateList, setCertificateList] = useState([])
   const [guarantorList, setGuarantorList] = useState([])
-  const getEducation = "http://localhost:3003/api/v1/education/getUserEducation";
-  const getExperience = "http://localhost:3003/api/v1/experience/getUserWork";
-  const getCertificate = "http://localhost:3003/api/v1/certificate/getUserCertificate";
-  const getGuarantor = "http://localhost:3003/api/v1/guarantor/getUserGuarantor";
+  const getEducation = `${process.env.REACT_APP_API_URL}education/getUserEducation`;
+  const getExperience = `${process.env.REACT_APP_API_URL}experience/getUserWork`;
+  const getCertificate = `${process.env.REACT_APP_API_URL}certificate/getUserCertificate`;
+  const getGuarantor = `${process.env.REACT_APP_API_URL}guarantor/getUserGuarantor`;
 
   useEffect(()=>{
     const getApplicantDetails = async()=>{

@@ -7,12 +7,13 @@ import JobPostJobPage from "../component/JobPostJobPage";
 import Header from "../component/Header";
 
 function JobPage() {
+  const apiRoute = process.env.REACT_APP_API_URL;
   const [errorMessage, setErrorMessage] = useState("");
   const [allJobs, setAllJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [filterList, setFilterList] = useState([]);
   const [mainSearchForm, setMainSearchForm] = useState({});
-  const baseURL = "http://localhost:3003/api/v1/job/allJob";
+  const baseURL = `${apiRoute}job/allJob`;
 
   useEffect(() => {
     const getAllJobs = async () => {

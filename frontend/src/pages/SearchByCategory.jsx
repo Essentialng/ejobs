@@ -15,10 +15,7 @@ function SearchByCategory() {
   const allJobs = useSelector(state=>state.jobListSlice.jobList)
   const [searchData, setSearchData] = useState({})
   const [filteredJobs, setFilteredJobs] = useState([])
-  const [viewedJob, setViewedJob] = useState(allJobs)
-
   // --------- states--------------
-  const [categoryJob, setCategoryJob] = useState(null)
   
   // ----------Function handlers--------------
   const handleChange = (e)=>{
@@ -56,7 +53,7 @@ function SearchByCategory() {
           className="border-2 h-80 relative flex flex-col items-center justify-center"
         >
           {loggedInUser && loggedInUser?.userType === 'jobEmployer' && <h2 className="absolute right-8 top-8 px-4 py-1 bg-red-600 text-slate-50 cursor-pointer">
-            <Link to="/1234/postJob">Post a Job in this Category</Link>
+            <Link to={`/${loggedInUser?._id}/postJob`}>Post a Job in this Category</Link>
           </h2>}
           <div className="absolute left-8 top-8 text-slate-50 ">
             <span>Home &gt; Category</span>

@@ -30,8 +30,8 @@ function ApplicantList() {
   const [interviews, setInterviews] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const getApplicationByJobId = "http://localhost:3003/api/v1/application/getApplicationByJobId"
-  const getInterviewByJobId = "http://localhost:3003/api/v1/interview/getInterviewByJobId"
+  const getApplicationByJobId = `${process.env.REACT_APP_API_URL}application/getApplicationByJobId`
+  const getInterviewByJobId = `${process.env.REACT_APP_API_URL}interview/getInterviewByJobId`
   // const updateApplication = "http://localhost:3003/api/v1/application/updateApplication"
 
 

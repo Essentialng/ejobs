@@ -66,7 +66,7 @@ function Homepage() {
   const loggedInUser = useSelector((state) => state.user);
   const [allJob, setAllJob] = useState([]);
   const [selectedJobs, setSelectedJobs] = useState([])
-  const [activeJob, setActiveJob] = useState('recent')
+  const [activeJob, setActiveJob] = useState('full time')
   const allNotifications = useSelector(state=>state.notification.notificationList)
   const allJobURL = `${apiRoute}job/allJob`;
   const dispatch = useDispatch()
@@ -76,7 +76,9 @@ function Homepage() {
 
   // ---------Pagination data----------
   const [paginatedJob, setPaginatedJob] = useState([]);
-
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 2;
+  const [totalJobs, setTotalJobs] = useState(allJob.length);
 
   // --------data-----------
 const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
@@ -84,60 +86,77 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
   // --------Fetch all jobs----------
   useEffect(() => {
     const fetchJobs = async () => {
-      console.log({first: process.env.REACT_APP_API_URL})
-      dispatch(fetchingJobStart)
+      dispatch(fetchingJobStart());
       try {
         const allJobs = await axios.get(allJobURL, {
-          withCredentials: true
+          withCredentials: true,
         });
-        if(allJobs) dispatch(fetchingJobSuccess(allJobs.data))
-        setAllJob(allJobs.data) 
-        setSelectedJobs(allJobs.data)
+        if (allJobs) dispatch(fetchingJobSuccess(allJobs.data));
+        setAllJob(allJobs.data);
+        setSelectedJobs(allJobs.data);
+        setTotalJobs(allJobs.data.length);
+        performPagination(currentPage, allJobs.data);
       } catch (error) {
-        dispatch(fetchinfJobFailure(error.message))
+        dispatch(fetchinfJobFailure(error.message));
       }
     };
     fetchJobs();
   }, []);
-
-
-  const handlejobPage = (currentPage) => {
-    setCurrentJobPage(currentPage);
-  };
+  
 
 
 
   // -----------------Pagination system---------------
-  const handleNextJobContent = () => {
-    currentJobpage === "3"
-      ? setCurrentJobPage("1")
-      : setCurrentJobPage(String(Number(currentJobpage) + 1));
-  };
-  const handlePrevJobContent = () => {
-    currentJobpage === "1"
-      ? setCurrentJobPage("3")
-      : setCurrentJobPage(String(Number(currentJobpage) - 1));
-  };
 
-  // ------------Pagination handler-------------
-  const handlePagination = ()=>{
-    
+  
+  const totalPages = Math.ceil(paginatedJob?.length / itemsPerPage)
+
+
+  const handlePrevPage = () => {
+    if (currentPage === 1) return;
+    setCurrentPage(currentPage - 1);
+    performPagination(currentPage - 1, selectedJobs);
+  };
+  
+  const handleNextPage = () => {
+    if (currentPage >= totalPages) return;
+    setCurrentPage(currentPage + 1);
+    performPagination(currentPage + 1, selectedJobs);
+  };
+  
+
+  const performPagination = (currentState, currentJobs) => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    const paginatedData = currentJobs.slice(startIndex, endIndex)
+    console.log({first: paginatedData})
+    setPaginatedJob(paginatedData)
   }
+  // -----------------Pagination system---------------
+  
 
-
-  // ------hanlde job filter----------
-  const handleFilter = (option)=>{
-    if(option === 'part time'){
-      setActiveJob('part time')
-      setSelectedJobs(allJob.filter((eachJob)=>{return(eachJob.workType.toLowerCase() === 'Part-Time'.toLocaleLowerCase())}))
-    }else if(option === 'full time'){
-      setSelectedJobs(allJob.filter((eachJob)=>{return(eachJob.workType.toLowerCase() === 'Full-Time'.toLocaleLowerCase())}))
-      setActiveJob('full time')
-    }else{
-      setActiveJob('recent')
-      setSelectedJobs(allJob)
+  
+  // ------handle job filter----------
+  const handleFilter = (option) => {
+    let filteredJobs;
+    if (option === 'part time') {
+      setActiveJob('part time');
+      filteredJobs = allJob.filter((job) => job.workType.toLowerCase() === 'part-time');
+    } else if (option === 'full time') {
+      setActiveJob('full time');
+      filteredJobs = allJob.filter((job) => job.workType.toLowerCase() === 'full-time');
+    } else {
+      setActiveJob('recent');
+      filteredJobs = [...allJob].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
-  }
+    setSelectedJobs(filteredJobs);
+    setCurrentPage(1);
+    setTotalJobs(filteredJobs.length);
+    performPagination(1, filteredJobs);
+  };
+  
+
+  
 
   // ----------Handle Homesearch------------
   const handleHomeSearch = (e)=>{
@@ -172,12 +191,11 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
   }
 
 
-
   return (
     <div className="w-screen overflow-x-hidden h-screen sm:text-md text-sm">
       
       
-      {/* ----------------Hero Section---------------- */}
+      {/* ----------------Hero Section---------------- */} 
       <section
       style={{ background: `url(${Background}) no-repeat center center/cover` }}
       className="relative w-full min-h-screen mb-10 bg-cover sm:px-20 px-5 pb-16"
@@ -461,69 +479,32 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
               Full Time
             </button>
           </div>
-
-          {/* ----------Job search section----------- */}
-          <section id="jobResult" className="sm:w-2/3 w-full mx-auto sm:px-20 px-5">
-            {allJob && selectedJobs.map((eachJob, index) => {
-              return (
-                <JobPostHomePage
-                  key={index}
-                  employerName={eachJob.employerName}
-                  salary={eachJob.salary}
-                  state={eachJob.state}
-                  workType={eachJob.workType}
-                  jobTitle={eachJob.jobTitle}
-                  id={eachJob._id}
-                />
-              );
-            })}
-            <div className="flex mb-10 items-center justify-center gap-2 border-2 w-fit border-slate-300 mx-auto">
-              <FaLessThan
-                onClick={handlePrevJobContent}
-                className="cursor-pointer text-slate-500 hover:text-orange-500"
-              />
-              <span
-                onClick={() => {
-                  handlejobPage("1");
-                }}
-                className={`${
-                  currentJobpage === "1"
-                    ? "px-2 bg-orange-500 text-slate-50 cursor-pointer"
-                    : "ppx-2 text-slate-800 hover:bg-white hover:text-orange-500 cursor-pointer"
-                }`}
-              >
-                1
-              </span>
-              <span
-                onClick={() => {
-                  handlejobPage("2");
-                }}
-                className={`${
-                  currentJobpage === "2"
-                    ? "px-2 bg-orange-500 text-slate-50 cursor-pointer"
-                    : "ppx-2 text-slate-800 hover:bg-white hover:text-orange-500 cursor-pointer"
-                }`}
-              >
-                2
-              </span>
-              <span
-                onClick={() => {
-                  handlejobPage("3");
-                }}
-                className={`${
-                  currentJobpage === "3"
-                    ? "px-2 bg-orange-500 text-slate-50 cursor-pointer"
-                    : "ppx-2 text-slate-800 hover:bg-white hover:text-orange-500 cursor-pointer"
-                }`}
-              >
-                3
-              </span>
-              <FaGreaterThan
-                onClick={handleNextJobContent}
-                className="cursor-pointer text-slate-500 hover:text-orange-500"
-              />
-            </div>
-          </section>
+    <section id="jobResult" className="sm:w-2/3 w-full mx-auto sm:px-20 px-5">
+      {paginatedJob && paginatedJob.map((eachJob, index) => (
+      <JobPostHomePage
+      key={index}
+      employerName={eachJob.employerName}
+      salary={eachJob.salary}
+      state={eachJob.state}
+      workType={eachJob.workType}
+      jobTitle={eachJob.jobTitle}
+      id={eachJob._id}
+    />
+  ))}
+  <div className="flex mb-10 items-center justify-center gap-2 border-2 w-fit border-slate-300 mx-auto">
+    <FaLessThan
+      onClick={handlePrevPage}
+      className="cursor-pointer text-slate-500 hover:text-orange-500"
+    />
+    <span>
+      Page {currentPage} of {totalPages}
+    </span>
+    <FaGreaterThan
+      onClick={handleNextPage}
+      className="cursor-pointer text-slate-500 hover:text-orange-500"
+    />
+  </div>
+</section>
         </search>
 
 

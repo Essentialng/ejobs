@@ -18,8 +18,8 @@ import { convertToBase64 } from "../Utils/fileConverter";
 
 function ApplyJob() {
   const jobParams = useParams().jobId;
-  const baseURL = `http://localhost:3003/api/v1/application/createApplication`;
-  const jobSource = `http://localhost:3003/api/v1/job/getAjob`;
+  const baseURL = `${process.env.REACT_APP_API_URL}application/createApplication`;
+  const jobSource = `${process.env.REACT_APP_API_URL}job/getAjob`;
   const currentUser = useSelector((state) => state.user);
   const [jobDetails, setJobDetails] = useState({});
   const [formDataInfo, setFormDataInfo] = useState({});

@@ -1,6 +1,5 @@
 import React from "react";
 import Background from "../assets/Images/recruit.jpg";
-import Background2 from "../assets/Images/nightCompany.jpg";
 import Header from "../component/Header";
 import FooterComponent from "../component/Footer";
 

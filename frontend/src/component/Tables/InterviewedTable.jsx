@@ -7,7 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 function InterviewTable({data}) {
-  const updateApplication = "http://localhost:3003/api/v1/application/updateApplication";
+  const updateApplication = `${process.env.REACT_APP_API_URL}application/updateApplication`;
   const currentUser = useSelector(state=>state.user.currentUser)
   const dispatch = useDispatch()
   const navigate = useNavigate()

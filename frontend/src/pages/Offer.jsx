@@ -12,7 +12,7 @@ import { addNotification } from '../redux/notification/notificationSlice';
 
 
 // -----------------Status---------------------
-const updateOfferURL = "http://localhost:3003/api/v1/offer/updateOffer";
+const updateOfferURL = `${process.env.REACT_APP_API_URL}offer/updateOffer`;
 // -----------------Status---------------------
 
 const Offer = () => {
@@ -21,7 +21,7 @@ const Offer = () => {
     const offerId = useParams().offerId
     const applicationId = useParams().applicationId
     const dispatch = useDispatch()
-    const fetchOfferURL = 'http://localhost:3003/api/v1/offer/getAnOffer'
+    const fetchOfferURL = `${process.env.REACT_APP_API_URL}offer/getAnOffer`
     const [offerData, setOfferData] = useState({})
     const navigate = useNavigate()
 

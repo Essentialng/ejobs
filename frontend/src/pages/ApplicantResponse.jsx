@@ -19,8 +19,8 @@ function ApplicantResponse() {
   const loggedInUser = useSelector((state) => state.user);
 
   // ------------URL routes---------------
-  const fetchApplicationDetails = "http://localhost:3003/api/v1/application/getAnApplication/"
-  const fetchJobDetails =  `http://localhost:3003/api/v1/job/getAjob`;
+  const fetchApplicationDetails = `${process.env.REACT_APP_API_URL}application/getAnApplication/`
+  const fetchJobDetails =  `${process.env.REACT_APP_API_URL}job/getAjob`;
 
   // ------------Fetch job details--------------
   useEffect(()=>{

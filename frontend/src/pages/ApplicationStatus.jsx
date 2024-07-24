@@ -43,10 +43,10 @@ function ApplicantionStatus() {
   const [appResponse, setAppResponse] = useState('Rejected');
   const [allApplicant, setAllApplicant] = useState([]);
   
-  const fetchJobURL = 'http://localhost:3003/api/v1/job/getAJob';
-  const updateApplication = "http://localhost:3003/api/v1/application/updateApplication";
-  const createNotificationUrl = "http://localhost:3003/api/v1/notification/createNotification";
-  const createInterviewURL = "http://localhost:3003/api/v1/interview/createInterview";
+  const fetchJobURL = `${process.env.REACT_APP_API_URL}job/getAJob`;
+  const updateApplication = `${process.env.REACT_APP_API_URL}application/updateApplication`;
+  const createNotificationUrl = `${process.env.REACT_APP_API_URL}notification/createNotification`;
+  const createInterviewURL = `${process.env.REACT_APP_API_URL}interview/createInterview`;
 
   useEffect(() => {
     const fetchJobDetails = async () => {

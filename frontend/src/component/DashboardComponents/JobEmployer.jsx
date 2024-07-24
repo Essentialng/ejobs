@@ -17,7 +17,7 @@ function JobEmployer({data}) {
   const [showMessage, setShowMessage] = useState(false)
   const [moreOptions, setMoreOptions] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(null)
-  const updateJobEmployerURL = 'http://localhost:3003/api/v1/jobrecruiter/updateJobEmployer' 
+  const updateJobEmployerURL = `${process.env.REACT_APP_API_URL}jobrecruiter/updateJobEmployer` 
   const [isLoading, setIsloading] = useState(false)
 
 

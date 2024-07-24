@@ -9,7 +9,7 @@ function OrganizationEmployee({ next, prev, formData, setFormData }) {
     const [error, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState(null)
     const navigate = useNavigate()
-    const baseUrl = "http://localhost:3003/api/v1/auth/signup"
+    const baseUrl = `${process.env.REACT_APP_API_URL}auth/signup`
     const [loading, setLoading] = useState(false)
 
 

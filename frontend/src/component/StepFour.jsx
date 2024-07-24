@@ -15,7 +15,7 @@ const StepFour = (props) => {
   const [error, setError] = useState("");
   const [jobChoice, setChoices] = useState([]);
   const [loading, setLoading] = useState(false)
-  const baseURL = "http://localhost:3003/api/v1/auth/signup";
+  const baseURL = `${process.env.REACT_APP_API_URL}auth/signup`;
 
   const handleCategorySelection = (e) => {
     const select =

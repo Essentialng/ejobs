@@ -15,8 +15,8 @@ import LoadSpinner from "../component/Modals/LoadSpinner";
 function SingleJob() {
   // ------------Params-----------------
   const jobParam = useParams().jobId
-  const baseURL = `http://localhost:3003/api/v1/job/getAjob`
-  const createJobReportURL = 'http://localhost:3003/api/v1/jobReport/createjobReport'
+  const baseURL = `${process.env.REACT_APP_API_URL}job/getAjob`
+  const createJobReportURL = `${process.env.REACT_APP_API_URL}jobReport/createjobReport`
   
   // ------------Redux states--------------
   const loggedInUser = useSelector(state=>state.user)

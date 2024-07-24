@@ -9,7 +9,7 @@ function StepOne(props) {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [retypingPassword, setRetypingPassword] = useState(false);
-    const baseURL = 'http://localhost:3003/api/v1/auth/signin';
+    const baseURL = `${process.env.REACT_APP_API_URL}auth/signin`;
 
     const verifyEmail = () => {
         setError(false);

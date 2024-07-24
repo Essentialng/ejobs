@@ -6,7 +6,7 @@ import axios from 'axios';
 import LoadSpinner from '../component/Modals/LoadSpinner';
 
 function Benefit() {
-  const createBenefitRoute = 'http://localhost:3003/api/v1/benefit/createBenefit'
+  const createBenefitRoute = `${process.env.REACT_APP_API_URL}benefit/createBenefit`
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const navigate = useNavigate()

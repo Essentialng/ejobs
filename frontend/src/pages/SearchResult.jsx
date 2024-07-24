@@ -9,10 +9,7 @@ import { useParams } from "react-router-dom";
 function PostedJobs() {
   const dispatch = useDispatch()
   const params = useParams()
-
   const allJobs = dispatch(state=>state)
-  console.log({all: allJobs})
-  console.log({par: params})
 
   return (
     <div>

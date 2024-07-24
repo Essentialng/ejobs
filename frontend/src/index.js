@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from "./redux/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 import { ToastContainer } from 'react-toastify';
+import TawkMessengerReact from '@tawk.to/tawk-messenger-react'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,6 +15,7 @@ root.render(
   <PersistGate persistor={persistor}>
     <Provider store={store}>
       <React.StrictMode>
+        <TawkMessengerReact/>
         <ToastContainer/>
         <App />
       </React.StrictMode>

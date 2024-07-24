@@ -35,10 +35,10 @@ const [previewImage, setPreviewImage] = useState(null)
 
 
   // ----------URL Links---------------
-  const createPersonURL = `http://localhost:3003/api/v1/contactPerson/createContact`;
-  const getjobURL = 'http://localhost:3003/api/v1/job/getAJob';
-  const updatePerson = 'http://localhost:3003/api/v1/contactPerson/updateContact';
-  const updateCompanyProfile = 'http://localhost:3003/api/v1/jobrecruiter/updateJobEmployer'
+  const createPersonURL = `${process.env.REACT_APP_API_URL}contactPerson/createContact`;
+  const getjobURL = `${process.env.REACT_APP_API_URL}job/getAJob`;
+  const updatePerson = `${process.env.REACT_APP_API_URL}contactPerson/updateContact`;
+  const updateCompanyProfile = `${process.env.REACT_APP_API_URL}jobrecruiter/updateJobEmployer`
 
 
 

@@ -17,9 +17,6 @@ function Blacklist() {
   const [selectionError, setSelectionError] = useState(false);
 
 
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const searchTable = formData.searchOption;

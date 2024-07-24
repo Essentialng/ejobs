@@ -20,14 +20,14 @@ import SalaryPayment from '../component/DashboardComponents/SalaryPayment';
 import Report from '../component/DashboardComponents/Report';
 import InterviewsReport from '../component/DashboardComponents/Interview';
 
-const getAllJobURL = 'http://localhost:3003/api/v1/job/allJob';
-const getAllNotificationURL = 'http://localhost:3003/api/v1/notification/getAllNotification';
-const getAllApplications = 'http://localhost:3003/api/v1/application/allApplication';
-const getAllEmployer = 'http://localhost:3003/api/v1/jobrecruiter/allJobEmployer';
-const getAllJobSeeker = 'http://localhost:3003/api/v1/jobSeeker/allJobSeeker';
-const getAllInterview = 'http://localhost:3003/api/v1/interview/getAllInterview';
-const getJobSeekerReport = 'http://localhost:3003/api/v1/employeeReport/getAllEmployeeReport';
-const getEmployerReport = 'http://localhost:3003/api/v1/employerReport/getAllEmployerReport';
+const getAllJobURL = `${process.env.REACT_APP_API_URL}job/allJob`;
+const getAllNotificationURL = `${process.env.REACT_APP_API_URL}notification/getAllNotification`;
+const getAllApplications = `${process.env.REACT_APP_API_URL}application/allApplication`;
+const getAllEmployer = `${process.env.REACT_APP_API_URL}jobrecruiter/allJobEmployer`;
+const getAllJobSeeker = `${process.env.REACT_APP_API_URL}jobSeeker/allJobSeeker`;
+const getAllInterview = `${process.env.REACT_APP_API_URL}interview/getAllInterview`;
+const getJobSeekerReport = `${process.env.REACT_APP_API_URL}employeeReport/getAllEmployeeReport`;
+const getEmployerReport = `${process.env.REACT_APP_API_URL}employerReport/getAllEmployerReport`;
 
 const Dashboard = () => {
   const [allJobs, setAllJobs] = useState([]);

@@ -25,7 +25,7 @@ import { setReportGottenList } from "../redux/reportGotten/reportGottenSlice";
 
 
 function SigninPages() {
-    const baseURL = "http://localhost:3003/api/v1/auth/signin";
+    const baseURL = `${process.env.REACT_APP_API_URL}auth/signin`;
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         userType:'jobSeeker'
