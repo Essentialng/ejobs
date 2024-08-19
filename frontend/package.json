@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "ejob_backend",
+=======
+  "name": "ejob-cra",
+>>>>>>> origin/main
   "version": "0.1.0",
   "private": true,
   "dependencies": {
