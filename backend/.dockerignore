@@ -1,0 +1,54 @@
+# Node modules and related files
+node_modules
+npm-debug.log
+package-lock.json
+
+# Logs and runtime data
+*.log
+*.gz
+*.tmp
+*.pid
+*.pid.lock
+*.swp
+*.swo
+*.swn
+
+# Build outputs
+build
+dist
+out
+
+# Dependency directories
+bower_components
+jspm_packages
+
+# Environment configuration
+.env
+
+# Git files
+.git
+.gitignore
+
+# Docker related files
+Dockerfile
+docker-compose.yml
+
+# IDE/editor directories
+.vscode
+.idea
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+*.tgz
+*.tar.gz
+*.zip
+*.rar
+
+# Coverage and testing
+coverage
+test-results
