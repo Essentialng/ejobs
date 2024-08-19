@@ -71,7 +71,7 @@ function JobEmployer({data}) {
             <tr className={`hover:bg-gray-100 mt-4 ${eachCandidate.isBlacklisted ? 'bg-red-500 text-white hover:text-gray-800' : "text-gray-500"}`} key={index}>
               <td className="border-2 border-gray-200 text-xs font-medium px-6 py-4 tracking-wider">{index + 1}</td>
               <td className="border-2 border-gray-200 text-xs font-medium px-6 py-4 tracking-wider">
-                {eachCandidate.avatar ? <img alt="profile" className="w-10 h-10 rounded-full object-cover" src={ProfilePix} /> : <CgProfile className='w-6 h-6'/>}
+                {eachCandidate.avatar ? <img alt="profile" className="w-10 h-10 rounded-full object-cover" src={eachCandidate.avatar||ProfilePix} /> : <CgProfile className='w-6 h-6'/>}
               </td>
 
               <td className="border-2 border-gray-200 text-xs font-medium px-6 py-4 tracking-wider">{eachCandidate.companyName}</td>

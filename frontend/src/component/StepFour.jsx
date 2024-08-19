@@ -123,7 +123,7 @@ const StepFour = (props) => {
             return (
               <span
                 key={index}
-                className="text-sm sm:text-md py-1 px-6 cursor-pointer text-orange-500 bg-white rounded-3xl border-2 border-orange-500 hover:bg-orange-500 hover:text-white"
+                className="text-sm sm:text-md py-1 px-6 cursor-pointer text-orange-500 bg-white rounded-3xl border-2 border-orange-500 hover:bg-orange-500 hover:text-white active:bg-white active:text-orange-500"
                 onClick={handleCategorySelection}
               >
                 {category}
@@ -142,7 +142,7 @@ const StepFour = (props) => {
           className="text-slate-50 hover:brightness-90 bg-orange-500 my-5 w-1/2 py-2"
           onClick={handleNext}
         >
-          {`${loading ? <LoadSpinner/> : "Submit"}`}
+          {loading ? <LoadSpinner/> : "Submit"}
         </button>
       </div>
     </div>

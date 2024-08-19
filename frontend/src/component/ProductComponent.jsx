@@ -4,7 +4,7 @@ function ProductComponent({ productImage, productTitle }) {
   return (
     <div className="relative rounded-lg overflow-hidden shadow-lg bg-white">
       <img 
-        className="w-48 h-40 object-cover"
+        className="w-52 sm:w-56 h-52 object-cover"
         src={productImage} 
         alt="Product Image" 
       />

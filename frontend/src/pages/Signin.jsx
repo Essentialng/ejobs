@@ -20,6 +20,7 @@ import { setSalaryPaidList } from "../redux/salaryPaid/salaryPaid";
 import { setSalaryRecievedList } from "../redux/salaryRecieved/salaryRecieved";
 import { setReportMadeList } from "../redux/reportMade/reportMadeSlice";
 import { setReportGottenList } from "../redux/reportGotten/reportGottenSlice";
+import { setEmployerProofList } from "../redux/employerProof/employerProofSlice";
 
 
 
@@ -79,6 +80,7 @@ function SigninPages() {
                         dispatch(setSalaryPaidList(data.salaryPaid))
                         dispatch(setReportMadeList(data.reportMade))
                         dispatch(setReportGottenList(data.reportGotten))
+                        dispatch(setEmployerProofList(data.proofOfCompany))
                         break;
                     case 'admin':
                     break;
@@ -104,7 +106,7 @@ function SigninPages() {
             
             <div 
                 style={{ backgroundImage: `url(${Background})` }} 
-                className="relative w-full h-full sm:w-2/3 sm:h-4/5 bg-cover bg-center flex items-center justify-center"
+                className="relative w-full h-full sm:w-2/3 sm:h-full bg-cover bg-center flex items-center justify-center"
             >
                 <div className="absolute inset-0 bg-black opacity-50"></div>
                 <form className="relative z-10 bg-white p-8 rounded-lg shadow-md sm:w-1/2 w-3/4 text-gray-800">

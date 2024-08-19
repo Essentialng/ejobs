@@ -28,6 +28,7 @@ function IndividualEmployee(props) {
     setErrorMessage(null)
     setLoading(true)
     checkForErrors()
+    console.log({dtata: formData})
     if(checkForErrors() === true){
       return
     }
@@ -105,7 +106,7 @@ function IndividualEmployee(props) {
                 <input name='size' className="px-2 py-1 outline-none w-3/4 text-slate-700" onChange={handleChange} type="text" placeholder="Size" />
               </div>
               <div className="my-4">
-                <label className="block" htmlFor="certificate">Upload ID card</label>
+                <label className="block" htmlFor="certificate">Upload Certificate</label>
                 <input name='certificate' className="px-2 py-1 outline-none w-3/4" type="file" onChange={handleChange} placeholder="click here to upload doc +" />
               </div>
             </div>

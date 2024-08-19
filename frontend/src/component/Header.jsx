@@ -62,9 +62,9 @@ function Header({ lightMode }) {
         />
 
         {/* Desktop navigation */}
-        <nav className="hidden sm:flex items-center space-x-4">
+        <nav className="hidden sm:flex sm:gap-5 gap-2 items-center space-x-4">
           {menuItems.map((item) => (
-            <li key={item.label} className="font-semibold list-none text-sm uppercase">
+            <li key={item.label} className="font-semibold hover:bg-orange-400 px-4 py-2 hover:text-white list-none text-sm uppercase">
               {item.link ? (
                 <Link to={item.link}>{item.label}</Link>
               ) : (
@@ -75,6 +75,7 @@ function Header({ lightMode }) {
         </nav>
 
         {/* User profile or sign-in link */}
+        
         {loggedInUser.currentUser ? (
           <div className="hidden sm:block relative">
             <details className="flex flex-col gap-4 items-start justify-center">
@@ -82,7 +83,7 @@ function Header({ lightMode }) {
                 <CgProfile className="w-6 h-6" />
                 <BiDownArrow className="text-current" />
               </summary>
-              <div className="absolute bg-white text-gray-900 px-4 rounded-sm py-2 top-10 right-0 w-40">
+              <div className="absolute bg-white border-1.5 border-gray-400 text-gray-900 px-4 rounded-sm py-2 top-10 right-0 w-40">
                 <Link
                   to={loggedInUser.currentUser.userType === 'jobSeeker' 
                     ? `/profile/${loggedInUser.currentUser._id}` 

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 function ScheduleTable({ currentList, handleNavigation, data, title, handleInterview }) {
   const [viewMoreStates, setViewMoreStates] = useState(Array(data.length).fill(false));
-  const updateApplication = "http://localhost:3003/api/v1/application/updateApplication";
+  const updateApplication =  `${process.env.REACT_APP_API_URL}application/updateApplication`;
   const dispatch = useDispatch()
 
   const handleView = (index) => {
@@ -45,7 +45,6 @@ function ScheduleTable({ currentList, handleNavigation, data, title, handleInter
         </thead>
         <tbody>
           {data.map((eachData, index) => {
-            console.log(eachData)
             const timeRemaining = Date.now();
             const timeOfInterview = eachData.interviews[index].interviewTime;
             const dateOfInterview = eachData.interviews[index].interviewDate;

@@ -51,7 +51,7 @@ function ApplicantionStatus() {
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
-        const response = await axios.post(fetchJobURL, { jobId });
+        const response = await axios.post(fetchJobURL, { jobId: jobId }, {withCredentials: true});
         setJobDetails(response.data);
         setAllApplicant(response.data.numberOfApplicant)
         setApplications(response.data.applications)
@@ -74,15 +74,15 @@ function ApplicantionStatus() {
     try {
       if (appResponse === "Scheduled") {
         setInterviewData({...interviewData, application: applications[currentApplicant]._id})
-        await axios.post(createInterviewURL, interviewData);
+        await axios.post(createInterviewURL, interviewData, {withCredentials: true});
+        toast.success("Profile interview set successfully");
       }
-      await axios.put(updateApplication, formData);
-      toast.success("Profile successfully updated");
-      const createNotification = await axios.post(createNotificationUrl, {...notificationData, recipient: allApplicant[currentApplicant]._id,application: applications[currentApplicant]._id});
+      await axios.put(updateApplication, formData, {withCredentials: true});
+      const createNotification = await axios.post(createNotificationUrl, {...notificationData, recipient: allApplicant[currentApplicant]._id,application: applications[currentApplicant]._id}, {withCredentials: true});
       dispatch(addNotification(createNotification.data))
       toast.success("Updated Successfully");
     } catch (error) {
-      toast.error('Error Pls try again')
+      toast.error('Error updating pls try again')
       console.error("Error updating application:", error);
     }
   };

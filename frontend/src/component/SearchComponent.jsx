@@ -1,5 +1,6 @@
 // --------------Design two--------------------
 import { Link } from 'react-router-dom';
+import { jobIndustries, nigeriaStates, workTypes } from '../assets/jobData';
 
 function SearchComponent({ handleSearch, handleChange }) {
   return (
@@ -16,27 +17,46 @@ function SearchComponent({ handleSearch, handleChange }) {
             type="text" 
             placeholder='Job function' 
           />
-          <input 
+
+
+          <select
             onChange={handleChange} 
             name='industry' 
             className='px-3 py-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition' 
-            type="text" 
             placeholder='Any Industry' 
-          />
-          <input 
+          >
+            <option disabled>Industry</option>
+            {[jobIndustries.map((industry)=>{
+              return (<option key={industry} value={industry}>{industry}</option>)
+            })]}
+          </select>
+
+
+          <select 
             onChange={handleChange} 
             name='state' 
-            className='px-3 py-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition' 
-            type="text" 
+            className='px-3 py-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition'  
             placeholder='Location: Ikeja, Lagos' 
-          />
-          <input 
+          >
+            <option disabled>State</option>
+            {[nigeriaStates.map((state)=>{
+              return (<option key={state} value={state}>{state}</option>)
+            })]}
+          </select>
+
+
+          <select 
             onChange={handleChange} 
             name='workType' 
-            className='px-3 py-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition' 
-            type="text" 
+            className='px-3 py-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition'  
             placeholder='Type: Hybrid' 
-          />
+          >
+            <option disabled>Work type</option>
+            {[workTypes.map((workType)=>{
+              return (<option key={workType} value={workType}>{workType}</option>)
+            })]}
+          </select>
+          
           <button 
             onClick={handleSearch} 
             className='px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition'>

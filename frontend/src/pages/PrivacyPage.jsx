@@ -7,7 +7,7 @@ function Privacy() {
   return (
     <div>
       <div
-        className="h-72 relative px-24 after:absolute after:bg-black after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-55"
+        className="h-72 relative after:absolute after:bg-black after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-55"
         style={{
           background: `url(${Background})`,
           backgroundSize: "cover",

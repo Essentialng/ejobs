@@ -9,6 +9,7 @@ import SingleJob from './pages/SingleJob'
 import JobPage from './pages/JobPage'
 import EmployeePage from './pages/EmployeePage'
 import InterviewPeer from './pages/InterviewPeer'
+// import Video from './pages/InterviewMain';
 import PostJob from './pages/PostJob'
 import EmployeeData from './pages/EmployeeData'
 import Eja from './pages/Eja'
@@ -34,6 +35,9 @@ import EmployeeProfile from './pages/EmployeeProfile';
 import Dashboard from './pages/Dashboard';
 import MakeOffer from './pages/MakeOffer';
 import SearchByCategory from './pages/SearchByCategory';
+import Chat from './pages/Chat';
+import ChatTwo from './pages/ChatTwo';
+import VideoChat from './pages/InterviewMain';
 
 
 function App() {
@@ -83,7 +87,7 @@ function App() {
     //   element: <SetInterview/>
     // },
     {
-      path: "/interview/start",
+      path: "/interview/start/:interviewId",
       element: <InterviewPeer/>
     },
     {
@@ -99,9 +103,13 @@ function App() {
       element: <Quickjob/>
     },
     {
+      path: "/chat",
+      element: <ChatTwo/>
+    },
+    {
       path: "/searchByLocation/:locationId",
       element: <SearchByLocation/>
-    },
+  },
     {
       path: "/searchByCategory/:categoryName",
       element: <SearchByCategory/>

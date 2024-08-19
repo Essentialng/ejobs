@@ -223,7 +223,7 @@ function TemplateCV() {
             <Link className='bg-red-500 px-4 py-2 text-white rounded-sm' to={`/profile/${loggedInUser.currentUser._id}`}>Profile</Link>
           </div>
           {/* ----------------template region--------------------- */}
-          <div ref={pdfTargetRef}>
+          <div className="w-5/6" ref={pdfTargetRef}>
           {template}
           </div>
         </div>

@@ -49,6 +49,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // ------------Dependencies collection-------------------
 import axios from "axios";
+import qs from 'query-string'
 
 // -------------Redux reducers---------------------------
 import { fetchinfJobFailure, fetchingJobStart, fetchingJobSuccess } from "../redux/jobList/jobListSlice";
@@ -56,7 +57,8 @@ import { fetchinfJobFailure, fetchingJobStart, fetchingJobSuccess } from "../red
 // -------------Data collection----------------------------
 import CounterCard from "../component/CounterCard";
 import { PiBriefcaseBold, PiFactoryDuotone } from "react-icons/pi";
-import { workTypes } from "../assets/jobData";
+import { nigeriaStates, workTypes } from "../assets/jobData";
+import { toast } from "react-toastify";
 
 
 function Homepage() {
@@ -68,7 +70,7 @@ function Homepage() {
   const [selectedJobs, setSelectedJobs] = useState([])
   const [activeJob, setActiveJob] = useState('full time')
   const allNotifications = useSelector(state=>state.notification.notificationList)
-  const allJobURL = `${apiRoute}job/allJob`;
+  const allJobURL = `${apiRoute}job/allJob?title=software%20engineering&lenght=10`;
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({})
   const navigate = useNavigate()
@@ -178,16 +180,41 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
 
 
   // -----------Handle scroll-------------
-  const handleScroll = (e)=>{
-    e.preventDefault()
-    searchSection.current.scrollIntoView()
-  }
+  const handleFind = (e) => {
+    e.preventDefault();
+    
+    // console.log('Current formData:', formData);
+  
+    const { jobTitle, workType, state } = formData;
+  
+    if (!jobTitle && !workType && !state) {
+      return toast.error('Kindly fill the search fields');
+    }
+  
+    const queryParams = {
+      ...(jobTitle && { jobTitle }),
+      ...(state && { state }),
+      ...(workType && { workType })
+    };
+  
+    // console.log('Query params:', queryParams);
+  
+    const queryString = qs.stringify(queryParams);
+    
+    // console.log('Query string:', queryString);
+  
+    navigate(`/jobs?${queryString}`);
+  };
 
 
   // ----------Handle changes----------------
-  const handleChange = (e)=>{
-    setFormData({...formData, [e.target.name]:e.target.value})
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
 
 
   return (
@@ -233,44 +260,50 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
         
         <form className="flex flex-col items-center gap-4 w-full sm:w-3/5 bg-white p-6 rounded-lg shadow-lg">
           <div className="flex gap-4 mb-4">
-            <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
+            <p className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
               FIND A JOB
-            </button>
-            <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
+            </p>
+            <p className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
               FIND A CANDIDATE
-            </button>
+            </p>
           </div>
           
           <input
-            className="p-2 mb-4 text-gray-600 w-full border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
-            type="text"
-            placeholder="e.g., Web Developer"
-            onChange={handleChange}
-            name="jobTitle"
-          />
-          <select
-            onChange={handleChange}
-            className="p-2 mb-4 w-full text-gray-600 border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
-            name="workType"
-          >
-            <option disabled>Category</option>
-            {
-              workTypes.map((eachType, index)=>{
-                return(
-                  <option value={eachType.toLocaleLowerCase()}>{eachType}</option>
-                )
-              })
-            }
-          </select>
-          <input
-            onChange={handleChange}
-            className="p-2 text-gray-600 mb-4 w-full border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
-            type="text"
-            name="state"
-            placeholder="Location: Lagos"
-          />
+          className="p-2 mb-4 text-gray-600 w-full border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
+          type="text"
+          placeholder="e.g., Web Developer"
+          onChange={handleChange}
+          name="jobTitle"
+          id='jobTitle'
+        />
+
+        <select
+          onChange={handleChange}
+          className="p-2 mb-4 w-full text-gray-600 border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
+          name="workType"
+          id="workType"
+        >
+          <option value="">Category</option>
+          {workTypes.map((eachType, index) => (
+            <option key={index} value={eachType}>{eachType}</option>
+          ))}
+        </select>
+
+        <select
+          onChange={handleChange}
+          className="p-2 text-gray-600 mb-4 w-full border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
+          name="state"
+          id="state"
+        >
+          <option value="">State</option>
+          {nigeriaStates.map((eachState, index) => (
+            <option key={index} value={eachState}>{eachState}</option>
+          ))}
+        </select>
+
+
           <button
-            onClick={handleScroll}
+            onClick={handleFind}
             className="bg-orange-500 px-6 py-2 text-white rounded-md hover:bg-orange-600 transition-colors"
           >
             Search
@@ -402,6 +435,9 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
   </div>
 </section>
 
+
+
+{/* -------------Vide section--------------- */}
 <section className="my-20 sm:px-20 px-5">
   <div className="flex items-center justify-between mb-6 text-sm w-full max-w-5xl mx-auto">
     <h2 className="text-2xl font-semibold text-gray-800">Short Videos</h2>
@@ -417,8 +453,10 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
   </div>
 </section>
 
+
+
 {/* ----------------Choices Section------------------- */}
-<section className="my-20 sm:px-20 px-5 border-t-4 py-4 border-b-4 border-orange-500">
+            <section className="my-20 sm:px-20 px-5 border-t-4 py-4 border-b-4 border-orange-500">
               <h2 className="text-xl font-semibold mb-2">Our Other Choices</h2>
               <div className="flex items-center justify-center flex-wrap gap-8">
                 <OtherChoices
@@ -456,6 +494,7 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
             </section>
 
 
+
     {/* ------------Job search section------------- */}
         <search ref={searchSection} className="bg-slate-300 py-10 sm:px-20 px-5">
           <div className="">
@@ -478,32 +517,32 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
               Full Time
             </button>
           </div>
-    <section id="jobResult" className="sm:w-2/3 w-full mx-auto sm:px-20 px-5">
-      {paginatedJob && paginatedJob.map((eachJob, index) => (
-      <JobPostHomePage
-      key={index}
-      employerName={eachJob.employerName}
-      salary={eachJob.salary}
-      state={eachJob.state}
-      workType={eachJob.workType}
-      jobTitle={eachJob.jobTitle}
-      id={eachJob._id}
-    />
-  ))}
-  <div className="flex mb-10 items-center justify-center gap-2 border-2 w-fit border-slate-300 mx-auto">
-    <FaLessThan
-      onClick={handlePrevPage}
-      className="cursor-pointer text-slate-500 hover:text-orange-500"
-    />
-    <span>
-      Page {currentPage} of {totalPages}
-    </span>
-    <FaGreaterThan
-      onClick={handleNextPage}
-      className="cursor-pointer text-slate-500 hover:text-orange-500"
-    />
-  </div>
-</section>
+              <section id="jobResult" className="sm:w-2/3 w-full mx-auto sm:px-20 px-5">
+                {paginatedJob && paginatedJob.map((eachJob, index) => (
+                <JobPostHomePage
+                key={index}
+                employerName={eachJob.employerName}
+                salary={eachJob.salary}
+                state={eachJob.state}
+                workType={eachJob.workType}
+                jobTitle={eachJob.jobTitle}
+                id={eachJob._id}
+              />
+            ))} 
+              <div className="flex mb-10 items-center justify-center gap-2 border-2 w-fit border-slate-300 mx-auto">
+                <FaLessThan
+                  onClick={handlePrevPage}
+                  className="cursor-pointer text-slate-500 hover:text-orange-500"
+                />
+                <span>
+                  Page {currentPage} of {totalPages}
+                </span>
+                <FaGreaterThan
+                  onClick={handleNextPage}
+                  className="cursor-pointer text-slate-500 hover:text-orange-500"
+                />
+              </div>
+          </section>
         </search>
 
 
@@ -514,78 +553,41 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
 
 
         {/* ----------------About section------------- */}
-  <section className="mt-10 py-10 sm:px-20 px-5">
-    <h2 className="text-3xl text-center font-bold mb-8 text-slate-800">Why Essential Jobs</h2>
-    <div className="flex items-center justify-center flex-wrap gap-4">
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-    </div>
-</section>
-
-
-{/* -------------Group Section--------------- */}
-{/* <section className="mt-16 mb-20 sm:px-20 px-5">
-  <div className="flex items-center justify-between mb-6">
-    <h3 className="text-2xl font-semibold text-slate-800">Groups You May Like</h3>
-    <Link className="font-semibold text-orange-500 hover:text-orange-600 transition-colors">
-      See More
-    </Link>
-  </div>
-  <div className="flex flex-wrap gap-6 items-center justify-center">
-    <CategoryComponent
-      categoryImage={Energy}
-      categoryTitle="IT News"
-      categoryMember="1"
-      categoryPost="0"
-    />
-    <CategoryComponent
-      categoryImage={Technology}
-      categoryTitle="Tech Group"
-      categoryMember="1"
-      categoryPost="0"
-    />
-    <CategoryComponent
-      categoryImage={SampleImage}
-      categoryTitle="Group"
-      categoryMember="1"
-      categoryPost="0"
-    />
-    <CategoryComponent
-      categoryImage={Entertainment}
-      categoryTitle="Essential Staff"
-      categoryMember="1"
-      categoryPost="0"
-    />
-  </div>
-</section> */}
+        <section className="mt-10 py-10 sm:px-20 px-5">
+          <h2 className="text-3xl text-center font-bold mb-8 text-slate-800">Why Essential Jobs</h2>
+          <div className="flex items-center justify-center flex-wrap gap-4">
+            <AboutComponent
+              logo={<FaBriefcase className="text-orange-500 text-3xl" />}
+              title="Search Millions of Jobs"
+              content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
+            />
+            <AboutComponent
+              logo={<FaBriefcase className="text-orange-500 text-3xl" />}
+              title="Search Millions of Jobs"
+              content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
+            />
+            <AboutComponent
+              logo={<FaBriefcase className="text-orange-500 text-3xl" />}
+              title="Search Millions of Jobs"
+              content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
+            />
+            <AboutComponent
+              logo={<FaBriefcase className="text-orange-500 text-3xl" />}
+              title="Search Millions of Jobs"
+              content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
+            />
+            <AboutComponent
+              logo={<FaBriefcase className="text-orange-500 text-3xl" />}
+              title="Search Millions of Jobs"
+              content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
+            />
+            <AboutComponent
+              logo={<FaBriefcase className="text-orange-500 text-3xl" />}
+              title="Search Millions of Jobs"
+              content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
+            />
+          </div>
+      </section>
 
 
 {/* --------------Product Section----------------- */}

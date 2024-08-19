@@ -1,5 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Background from '../assets/Images/group.jpg'
+import { nigeriaStates } from '../assets/jobData';
+import { lgaData } from '../assets/localGov';
+import {Country, State, City} from 'country-state-city'
+
 
 
 function StepThree({ next, prev, formData, setFormData }) {
@@ -7,7 +11,6 @@ function StepThree({ next, prev, formData, setFormData }) {
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const previousFormState = formData
-  
 
   const handleNext = (e) => {
     e.preventDefault()
@@ -33,8 +36,8 @@ function StepThree({ next, prev, formData, setFormData }) {
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <div className="w-full h-full flex items-center justify-center">
-        <form style={{ backgroundImage: `url(${Background})` }} className='sm:w-2/3 w-4/5 mx-auto h-ful relative sm:p-6 p-2 bg-cover flex flex-col items-center justify-center after:absolute after:bg-black after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-55 text-white'>
+      <div style={{ backgroundImage: `url(${Background})` }} className="w-full h-full sm:w-2/3 rounded-sm sm:h-fit bg-cover bg-center flex items-center justify-center">
+        <form className='sm:w-2/3 w-4/5 mx-auto h-ful relative sm:p-6 bg-cover flex flex-col items-center justify-center after:absolute after:bg-black after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-55 text-white bg-white p-8'>
           <h3 className="cursor-pointer absolute -top-8 right-0 py-0.5 border-[1px] border-red-600 hover:bg-white hover:text-red-500 px-4 bg-red-500 text-slate-50" onClick={handlePrevious}>back</h3>
           <div className='w-full relative z-20'>
             <h3 className="mb-4 text-center text-xl">Further Personal Info</h3>
@@ -80,39 +83,28 @@ function StepThree({ next, prev, formData, setFormData }) {
             <div className="w-1/2">
               <div className="w-full p-1.5 outline-none text-gray-600">
                 <label className="text-white block" htmlFor="country">Country</label>
-                <input className="w-full p-1.5 outline-none text-gray-600"
-                  onChange={handleChange}
-                  name="country"
-                  type="text"
-                  placeholder="Country"
-                />
+                <input type='text' onChange={handleChange} name="country" id="country" className='w-full p-1.5 outline-none text-gray-600' />
               </div>
+
               <div className="w-full p-1.5 outline-none text-gray-600">
                 <label className="text-white block" htmlFor="state">State</label>
-                <input className="w-full p-1.5 outline-none text-gray-600"
-                  onChange={handleChange}
-                  name="state"
-                  type="text"
-                  placeholder="State"
-                />
+                <input type='text' onChange={handleChange} name="state" id="state" className='w-full p-1.5 outline-none text-gray-600' />
               </div>
               <div className="w-full p-1.5 outline-none text-gray-600">
-                <label className="text-white block" htmlFor="localGovernment">LGA</label>
-                <input className="w-full p-1.5 outline-none text-gray-600"
-                  onChange={handleChange}
-                  name="localGovernment"
-                  type="text"
-                  placeholder="Local Government Area"
-                />
+                <label className="text-white block" htmlFor="state">localGovernment</label>
+                <input type='text' onChange={handleChange} name="localGovernment" id="localGovernment" className='w-full p-1.5 outline-none text-gray-600' />
               </div>
               <div className="w-full p-1.5 outline-none text-gray-600">
                 <label className="text-white block" htmlFor="gender">Gender</label>
-                <input className="w-full p-1.5 outline-none text-gray-600"
+                <select className="w-full p-1.5 outline-none text-gray-600"
                   onChange={handleChange}
                   name="gender"
-                  type="text"
-                  placeholder="Male/Female"
-                />
+                  id='gender'
+                  >
+                    <option value='Gender' disabled>Gender</option>
+                    <option value='Male' >Male</option>
+                    <option value="Female" >Female</option>
+                  </select>
               </div>
             </div>
           </div>

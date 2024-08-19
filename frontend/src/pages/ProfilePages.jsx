@@ -9,7 +9,7 @@ import Header from "../component/Header";
 import FooterComponent from "../component/Footer";
 import ProfileInput from "../component/ProfileInput";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import EducationCard from "../component/EducationCard";
 import EducationTemplate from "../component/EducationTemplate";
 import axios from "axios";
@@ -1258,7 +1258,7 @@ const handleOldGuarantor = (e) => {
               Submit
             </button>
                   </div>}
-            <div className="flex sm:flex-row flex-col sm:flex-wrap items-start justify-center gap-5 mt-4">
+            <div className="flex sm:flex-row flex-col sm:flex-wrap items-start justify-start gap-5 mt-4">
               
               
     {/* ---------------List of Guarantors------------------- */}
@@ -1317,7 +1317,7 @@ const handleOldGuarantor = (e) => {
               Delete
             </button>
           </div>
-                  </div>
+          </div>
                 );
               })}
             </div>

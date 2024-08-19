@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 
 // -----------Imported icons-------------------
 import { BsStar } from "react-icons/bs";
-import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import { FaCheckDouble, FaFacebook, FaLinkedin } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 
 
@@ -39,6 +39,7 @@ import { usePaystackPayment } from 'react-paystack';
 import { toast } from "react-toastify";
 import { addNewEmployerJob } from "../redux/employerJob/employerJobSlice";
 import PaymentHandler from "../component/PaymentHandler";
+import { BiCheck } from "react-icons/bi";
 
 
 
@@ -81,6 +82,7 @@ function PostJob() {
 
 // -----------------Payment selection handler-----------------
 const handleCategorySelection = (index, type, isPaid = false) => {
+  console.log('today', categorySelection);
   setCategorySelection(index);
   setJobProfile(prev => ({...prev, jobType: type}));
 };
@@ -214,7 +216,7 @@ const handleCategorySelection = (index, type, isPaid = false) => {
               <h2 className="font-semibold text-md my-2">Basic</h2>
               <p className="text-sm text-slate-500">Effortlessly filter and select relevant candidates from a pre-sorted applicant pool</p>
               <h4 className="mt-2 font-bold">Free</h4>
-              <button onClick={()=>{handleCategorySelection('0', 'basic')}} className="w-full py-2 px-2 bg-red-500 text-slate-50 my-2 rounded-sm">Continue</button>
+              <button onClick={()=>{handleCategorySelection('0', 'basic')}} className={`w-full py-2 px-2 ${jobProfile.jobType === 'basic' ? 'bg-green-400 text-white': 'bg-red-500 text-slate-50'} my-2 rounded-sm`}>{jobProfile.jobType === 'basic' ? <BiCheck className="mx-auto font-semibold text-white text-xl"/> : 'Continue'}</button>
             </div>
             
             
@@ -241,7 +243,7 @@ const handleCategorySelection = (index, type, isPaid = false) => {
               <h2 className="font-semibold text-md my-2">Partner with e-Job</h2>
               <p className="text-sm text-slate-500">Effortlessly filter and select relevant candidates from a pre-sorted applicant pool</p>
               <h4 className="mt-2 font-bold">Free</h4>
-              <button onClick={()=>{handleCategorySelection('3', 'partner')}} className="w-full py-2 px-2 bg-red-500 text-slate-50 my-2 rounded-sm">Continue</button>
+              <button onClick={()=>{handleCategorySelection('3', 'partner')}} className={`w-full py-2 px-2 ${jobProfile.jobType === 'partner' ? 'bg-green-400 text-white': 'bg-red-500 text-slate-50'} my-2 rounded-sm`}>{jobProfile.jobType === 'partner' ? <BiCheck className="mx-auto font-semibold text-white text-xl"/> : 'Continue'}</button>
             </div>
           </div>
         </section>
