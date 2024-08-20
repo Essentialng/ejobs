@@ -132,7 +132,7 @@ pipeline {
                     #!/bin/bash
                     BUILD_VER=${BUILD_VERSION}
                     echo "Deploying version: $BUILD_VER"
-                    ssh DevSecOps_Admin@13.92.179.121 "docker pull dahunsij/ejobs_backend:$BUILD_VER.RELEASE && docker stop ejobs_backend || true && docker rm ejobs_backend || true && docker run -d -p 3003:3003 --name ejobs_backend --network ejobs_nework --restart on-failure dahunsij/ejobs_backend:$BUILD_VER.RELEASE"
+                    ssh DevSecOps_Admin@13.92.179.121 "docker pull dahunsij/ejobs_backend:$BUILD_VER.RELEASE && docker stop ejobs_backend || true && docker rm ejobs_backend || true && docker run -d -p 3003:3003 --name ejobs_backend --network ejobs_network --restart on-failure dahunsij/ejobs_backend:$BUILD_VER.RELEASE"
                     '''
                 }
             }
