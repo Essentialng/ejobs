@@ -94,16 +94,16 @@ pipeline {
 
 
                                 // Clean up old images with the name "ejobs_backend"
-                                sh '''
-                                docker images | grep dahunsij/ejobs_backend | grep -v ":${env.BUILD_VERSION}.RELEASE" | awk '{print $3}' | xargs docker rmi -f || true
-                                '''
+                                // sh '''
+                                // docker images | grep dahunsij/ejobs_backend | grep -v ":${env.BUILD_VERSION}.RELEASE" | awk '{print $3}' | xargs docker rmi -f || true
+                                // '''
 
-                                Stop and remove any existing container with the same name
-                                sh "docker stop ejobs_backend || true"
-                                sh "docker rm ejobs_backend || true"
+                                // Stop and remove any existing container with the same name
+                                // sh "docker stop ejobs_backend || true"
+                                // sh "docker rm ejobs_backend || true"
 
-                                // Run the container
-                                sh "docker run -d -p 3003:3003 --name ejobs_backend dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
+                                // // Run the container
+                                // sh "docker run -d -p 3003:3003 --name ejobs_backend dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
                             }
                         }
                     }
