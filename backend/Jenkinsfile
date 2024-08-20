@@ -80,7 +80,7 @@ pipeline {
                 dir('ejobs/backend') {
                     script {
                         docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-                            sh "docker build -t dahunsij/ejobs_backend:latest -f docker/Dockerfile ."
+                            sh "docker build -t dahunsij/ejobs_backend:latest -f Dockerfile ."
                             sh "docker tag dahunsij/ejobs_backend:latest dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
                             sh "docker push dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
 
