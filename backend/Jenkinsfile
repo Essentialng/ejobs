@@ -45,6 +45,7 @@ pipeline {
                 dir('ejobs/backend') {
                     withSonarQubeEnv('SonarQube-Servers') {
                         sh '''
+                        echo "Running SonarQube Scanner..."
                         $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=ejobs_backend-CICD \
                         -Dsonar.projectKey=ejobs_backend-CICD \
                         -X
@@ -79,9 +80,22 @@ pipeline {
                 dir('ejobs/backend') {
                     script {
                         docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-                            sh "docker build -t ${DOCKER_IMAGE}:latest -f Dockerfile ."
-                            sh "docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:${env.BUILD_VERSION}.RELEASE"
-                            sh "docker push ${DOCKER_IMAGE}:${env.BUILD_VERSION}.RELEASE"
+                            sh "docker build -t dahunsij/ejobs_backend:latest -f Dockerfile ."
+                            sh "docker tag dahunsij/ejobs_backend:latest dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
+                            sh "docker push dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
+
+
+                            // Clean up old images with the name "ejobs_backend"
+                            sh '''
+                            docker images | grep dahunsij/ejobs_backend | grep -v ":${env.BUILD_VERSION}.RELEASE" | awk '{print $3}' | xargs docker rmi -f || true
+                            '''
+
+                            Stop and remove any existing container with the same name
+                            sh "docker stop ejobs_backend || true"
+                            sh "docker rm ejobs_backend || true"
+
+                            // Run the container
+                            sh "docker run -d -p 3003:3003 --name ejobs_backend dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
                         }
                     }
                 }
@@ -89,17 +103,70 @@ pipeline {
         }
         stage('TRIVY Image Scan') {
             steps {
-                sh "trivy image ${DOCKER_IMAGE}:${env.BUILD_VERSION}.RELEASE > trivyimage.txt"
+                sh "trivy image dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE > trivyimage.txt"
+            }
+        }
+        
+        // Create Docker network
+        stage('Create Docker Network') {
+            steps {
+                script {
+                    // Create a custom Docker network for the application
+                    sh "docker network create ejobs_network || true" // Use `|| true` to avoid error if the network already exists
+                }
             }
         }
         stage('Deploy to VM') {
             steps {
                 sshagent(['vm-ssh-credentials']) {
                     sh '''
-                    ssh DevSecOps_Admin@13.92.179.121 "docker pull ${DOCKER_IMAGE}:${BUILD_VERSION}.RELEASE && docker stop ${DOCKER_IMAGE} || true && docker rm ${DOCKER_IMAGE} || true && docker run -d -p 4000:4000 --name ${DOCKER_IMAGE} ${DOCKER_IMAGE}:${BUILD_VERSION}.RELEASE"
+                    #!/bin/bash
+                    BUILD_VER=${BUILD_VERSION}
+                    echo "Deploying version: $BUILD_VER"
+                    ssh DevSecOps_Admin@13.92.179.121 "docker pull dahunsij/ejobs_backend:$BUILD_VER.RELEASE && docker stop dahunsij/ejobs_backend || true && docker rm dahunsij/ejobs_backend || true && docker run -d -p 3003:3003 --name dahunsij/ejobs_backend dahunsij/ejobs_backend:$BUILD_VER.RELEASE"
                     '''
                 }
             }
         }
+        // stage('Setup Nginx') {
+        //     steps {
+        //         sshagent(['vm-ssh-credentials']) {
+        //             sh '''
+        //             ssh -o StrictHostKeyChecking=no DevSecOps_Admin@13.92.179.121 '
+        //                 # Update package lists and install Nginx
+        //                 sudo apt-get update &&
+        //                 sudo apt-get install -y nginx &&
+                        
+        //                 # Create the Nginx configuration for the application
+        //                 echo "
+        //                 server {
+        //                     listen 80;
+        //                     server_name backend-edriver.ooshinfo.com;
+
+        //                     location / {
+        //                         # Forward requests to the Docker container running on port 4000
+        //                         proxy_pass http://13.92.179.121:4000;
+        //                         proxy_set_header Host $host;
+        //                         proxy_set_header X-Real-IP $remote_addr;
+        //                         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        //                         proxy_set_header X-Forwarded-Proto $scheme;
+        //                     }
+        //                 }
+        //                 " | sudo tee /etc/nginx/sites-available/edrivers &&
+                        
+        //                 # Enable the configuration by linking it to sites-enabled
+        //                 sudo ln -sf /etc/nginx/sites-available/edrivers /etc/nginx/sites-enabled/ &&
+                        
+        //                 # Test the Nginx configuration for syntax errors
+        //                 sudo nginx -t &&
+                        
+        //                 # Restart Nginx to apply the new configuration
+        //                 sudo systemctl restart nginx
+        //             '
+        //             '''
+        //         }
+        //     }
+        // }
+        // Coming soon - Stages for monitoring and logging setup as needed
     }
 }
