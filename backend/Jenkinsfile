@@ -104,6 +104,7 @@ pipeline {
 
                                 // Run the container
                                 sh "docker run -d -p 3003:3003 --name ejobs_backend dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
+                            }
                         }
                     }
                 }
