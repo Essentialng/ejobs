@@ -79,23 +79,31 @@ pipeline {
             steps {
                 dir('ejobs/backend') {
                     script {
-                        docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-                            sh "docker build -t dahunsij/ejobs_backend:latest -f Dockerfile ."
-                            sh "docker tag dahunsij/ejobs_backend:latest dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
-                            sh "docker push dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
+                        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+
+                                // Enable BuildKit by not setting DOCKER_BUILDKIT=0
+                                sh "docker build -t dahunsij/ejobs_backend:latest -f Dockerfile ."
+
+                                
+                                // Tag the image with a version (you can update the versioning logic as needed)
+                                sh "docker tag dahunsij/ejobs_backend:latest dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
+                                
+                                // Push the images to Docker Hub
+                                sh "docker push dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
 
 
-                            // Clean up old images with the name "ejobs_backend"
-                            sh '''
-                            docker images | grep dahunsij/ejobs_backend | grep -v ":${env.BUILD_VERSION}.RELEASE" | awk '{print $3}' | xargs docker rmi -f || true
-                            '''
+                                // Clean up old images with the name "ejobs_backend"
+                                sh '''
+                                docker images | grep dahunsij/ejobs_backend | grep -v ":${env.BUILD_VERSION}.RELEASE" | awk '{print $3}' | xargs docker rmi -f || true
+                                '''
 
-                            Stop and remove any existing container with the same name
-                            sh "docker stop ejobs_backend || true"
-                            sh "docker rm ejobs_backend || true"
+                                Stop and remove any existing container with the same name
+                                sh "docker stop ejobs_backend || true"
+                                sh "docker rm ejobs_backend || true"
 
-                            // Run the container
-                            sh "docker run -d -p 3003:3003 --name ejobs_backend dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
+                                // Run the container
+                                sh "docker run -d -p 3003:3003 --name ejobs_backend dahunsij/ejobs_backend:${env.BUILD_VERSION}.RELEASE"
                         }
                     }
                 }
