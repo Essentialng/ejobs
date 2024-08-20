@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         jdk 'jdk17'
-        nodejs 'node18'
+        nodejs 'node20'
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
@@ -63,7 +63,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('ejobs/frontend') {
-                    sh "yarn install"
+                    sh "npm install"
                 }
             }
         }
@@ -79,9 +79,20 @@ pipeline {
                 dir('ejobs/frontend') {
                     script {
                         docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-                            sh "docker build -t ${DOCKER_IMAGE}:latest -f Dockerfile ."
-                            sh "docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:${env.BUILD_VERSION}.RELEASE"
-                            sh "docker push ${DOCKER_IMAGE}:${env.BUILD_VERSION}.RELEASE"
+                            sh "docker build -t dahunsij/ejobs_frontend:latest -f Dockerfile ."
+                            sh "docker tag dahunsij/ejobs_frontend:latest dahunsij/ejobs_frontend:${env.BUILD_VERSION}.RELEASE"
+                            sh "docker push dahunsij/ejobs_frontend:${env.BUILD_VERSION}.RELEASE"
+                            // Clean up old images with the name "ejobs_frontend"
+                            sh '''
+                            docker images | grep dahunsij/ejobs_frontend | grep -v ":${env.BUILD_VERSION}.RELEASE" | awk '{print $3}' | xargs docker rmi -f || true
+                            '''
+
+                            // Stop and remove any existing container with the same name
+                            sh "docker stop ejobs_frontend || true"
+                            sh "docker rm ejobs_frontend || true"
+
+                            // // Run the container
+                            sh "docker run -d -p 3002:3002 --name ejobs_frontend dahunsij/ejobs_frontend:${env.BUILD_VERSION}.RELEASE"
                         }
                     }
                 }
@@ -89,14 +100,14 @@ pipeline {
         }
         stage('TRIVY Image Scan') {
             steps {
-                sh "trivy image ${DOCKER_IMAGE}:${env.BUILD_VERSION}.RELEASE > trivyimage.txt"
+                sh "trivy image dahunsij/ejobs_frontend:${env.BUILD_VERSION}.RELEASE > trivyimage.txt"
             }
         }
         stage('Deploy to VM') {
             steps {
                 sshagent(['vm-ssh-credentials']) {
                     sh '''
-                    ssh DevSecOps_Admin@13.92.179.121 "docker pull ${DOCKER_IMAGE}:${BUILD_VERSION}.RELEASE && docker stop ${CONTAINER_NAME} || true && docker rm ${CONTAINER_NAME} || true && docker run -d -p 3000:3000 --name ${CONTAINER_NAME} ${DOCKER_IMAGE}:${BUILD_VERSION}.RELEASE"
+                    ssh DevSecOps_Admin@13.92.179.121 "docker pull dahunsij/ejobs_frontend:${BUILD_VERSION}.RELEASE && docker stop ${CONTAINER_NAME} || true && docker rm ${CONTAINER_NAME} || true && docker run -d -p 3002:3002 --name ${CONTAINER_NAME} dahunsij/ejobs_frontend:${BUILD_VERSION}.RELEASE"
                     '''
                 }
             }
@@ -111,12 +122,12 @@ pipeline {
                         echo "
                         server {
                             listen 80;
-                            server_name https://edrivers.ooshinfo.com;
+                            server_name https://ejobs.ooshinfo.com;
                             location / {
-                                proxy_pass http://13.92.179.121:3000;
+                                proxy_pass http://13.92.179.121:3002;
                             }
-                        }" | sudo tee /etc/nginx/sites-available/edrivers &&
-                        sudo ln -sf /etc/nginx/sites-available/edrivers /etc/nginx/sites-enabled/ &&
+                        }" | sudo tee /etc/nginx/sites-available/ejobs &&
+                        sudo ln -sf /etc/nginx/sites-available/ejobs /etc/nginx/sites-enabled/ &&
                         sudo nginx -t &&
                         sudo systemctl restart nginx
                     '

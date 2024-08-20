@@ -21,7 +21,7 @@ FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose port 3005  
-EXPOSE 3005  
+EXPOSE 3002  
 
 # Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
