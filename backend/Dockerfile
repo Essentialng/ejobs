@@ -23,4 +23,4 @@ COPY . .
 EXPOSE 3003
 
 # Command to run the application
-CMD ["npm", "run", "watch"]
+CMD ["npm", "run", "start"]

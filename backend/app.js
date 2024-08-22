@@ -33,7 +33,7 @@ import OfferRoute from './routes/jobsOffer/jobOffer.router.js'
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: ['http://13.92.179.121:3002/', 'http://localhost:3002'],
   credentials: true
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,7 +41,7 @@ app.use(cookieParser('secret'));
 app.use(morgan('dev'));
 
 // multer confiuration
-
+app.get('/', (req,res)=>{res.send('welcome to ejobs')})
 app.use('/api/v1/jobseeker', JobSeekerRouter);
 app.use('/api/v1/notification', NotificationRoute);
 app.use('/api/v1/jobrecruiter', JobEmployerRouter);
