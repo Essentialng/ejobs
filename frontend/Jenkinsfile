@@ -77,12 +77,9 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 dir('ejobs/frontend') {
-                        script {
-                            withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                                docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-                                
-                                // Clean up old images with the name "ejobs_frontend" befoare building the new one
-                                sh "docker images | grep dahunsij/ejobs_frontend | awk '{print \$3}' | xargs -I {} docker rmi {}"
+                    script {
+                        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
                                 
                                 sh "docker build -t dahunsij/ejobs_frontend:latest -f Dockerfile ."
 
