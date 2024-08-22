@@ -1,9 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react'
 
+import React, { useState, useEffect, useRef } from 'react';
 
-function StatisticsComponent({Logo, statisticNumber, statisticTitle, duration, value}) {
-  
-  const [count, setCount] = useState(0)
+const StatisticsComponent = ({ value, statisticTitle, Logo, duration }) => {
+  const [count, setCount] = useState(0);
   const countRef = useRef(null);
 
   const end = parseInt(value, 10) || 0;
@@ -14,7 +13,7 @@ function StatisticsComponent({Logo, statisticNumber, statisticTitle, duration, v
       ([entry]) => {
         if (entry.isIntersecting) {
           let start = 0;
-          const increment = statisticNumber / (animDuration / 16);
+          const increment = end / (animDuration / 16);
 
           const timer = setInterval(() => {
             start += increment;
@@ -42,16 +41,16 @@ function StatisticsComponent({Logo, statisticNumber, statisticTitle, duration, v
       }
     };
   }, [end, animDuration]);
-  
+
   return (
     <div ref={countRef} className="w-auto">
-        <div className="flex items-center gap-2 font-bold text-4xl text-slate-50">
-            {Logo}
-            <h2>{count}</h2>
-        </div>
-        <h1 className="text-slate-50 text-md">{statisticTitle}</h1>
+      <div className="flex items-center gap-2 font-bold text-4xl text-slate-50">
+        {Logo}
+        <h2>{count}</h2>
+      </div>
+      <h1 className="text-slate-50 text-md">{statisticTitle}</h1>
     </div>
-  )
-}
+  );
+};
 
-export default StatisticsComponent
+export default StatisticsComponent;

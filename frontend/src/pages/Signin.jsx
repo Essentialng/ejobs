@@ -21,6 +21,7 @@ import { setSalaryRecievedList } from "../redux/salaryRecieved/salaryRecieved";
 import { setReportMadeList } from "../redux/reportMade/reportMadeSlice";
 import { setReportGottenList } from "../redux/reportGotten/reportGottenSlice";
 import { setEmployerProofList } from "../redux/employerProof/employerProofSlice";
+import { Modal } from "flowbite-react";
 
 
 
@@ -157,6 +158,7 @@ function SigninPages() {
                     <div className="mt-4 text-center">
                         <p>Don't have an account? <Link className="text-blue-500 hover:underline" to='/signup'>Sign up</Link></p>
                     </div>
+                    <Link to='/forgetPassword'>Forget password</Link>
                     <button 
                         className="w-full py-2 mt-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition duration-200"
                     >

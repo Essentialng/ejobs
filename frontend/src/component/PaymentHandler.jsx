@@ -1,4 +1,5 @@
 // ------------version 2--------------
+import { Button } from 'flowbite-react';
 import React from 'react'
 import { usePaystackPayment } from 'react-paystack'
 import { toast } from "react-toastify";
@@ -32,13 +33,13 @@ const PaymentHandler = ({email, amount, change, item, type, profileHandler, prof
 
     return (
         <div>
-            <button className="w-full py-2 rounded-sm px-6 bg-green-500 text-slate-50 my-2" 
+            <Button className="w-full rounded-sm bg-green-500 text-slate-50 my-2" 
                 onClick={() => {
                     initializePayment(onSuccess, onClose)
                 }}
             >
                 Pay
-            </button>
+            </Button>
         </div>
     );
 }

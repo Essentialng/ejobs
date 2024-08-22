@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { BsPersonFillCheck } from 'react-icons/bs';
 import { MdCancel, MdMoreHoriz } from 'react-icons/md';
 import MessageModal from '../Modals/Mesage';
+import { Table } from 'flowbite-react';
 
 function Report({seekerReport, employerReport}) {
   const jobSeekerRef = useRef();
@@ -116,30 +117,28 @@ function Report({seekerReport, employerReport}) {
           </div>
         </form>
       </div>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">S/N</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Company</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Employer</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Content</th>
+      <Table className="w-full border-collapse">
+        <Table.Head>
+            <Table.HeadCell className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">S/N</Table.HeadCell>
+            <Table.HeadCell className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Company</Table.HeadCell>
+            <Table.HeadCell className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Employer</Table.HeadCell>
+            <Table.HeadCell className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Content</Table.HeadCell>
             {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Action</th> */}
-          </tr>
-        </thead>
-        <tbody>
+        </Table.Head>
+        <Table.Body>
           {reportContent?.map((eachCandidate, index) => (
-            <tr className="hover:bg-blue-50 hover:text-blue-900" key={index}>
-              <td className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">{index + 1}</td>
-              <td className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">{eachCandidate.employer.companyName}</td>
-              <td className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">{`${eachCandidate.reporter.firstName} ${eachCandidate.reporter.lastName}`}</td>
-              <td className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">
+            <Table.Row className="hover:bg-blue-50 hover:text-blue-900" key={index}>
+              <Table.Cell className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">{index + 1}</Table.Cell>
+              <Table.Cell className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">{eachCandidate.employer.companyName}</Table.Cell>
+              <Table.Cell className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">{`${eachCandidate.reporter.firstName} ${eachCandidate.reporter.lastName}`}</Table.Cell>
+              <Table.Cell className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">
                 <button onClick={()=>{
                   handleView();
                   handleSetReport(eachCandidate.reportContent)
                   }} className="bg-green-500 text-white px-4 py-2 rounded-md shadow hover:bg-green-600 focus:outline-none">
                   View
                 </button>
-              </td>
+              </Table.Cell>
               {/* <td className="border-t border-gray-200 text-xs font-medium text-gray-600 px-6 py-4 tracking-wider">
                 <button onClick={handleBlacklist} className="bg-red-500 text-white px-4 py-2 rounded-md shadow hover:bg-red-600 focus:outline-none">Blacklist User</button>
                 <button
@@ -149,10 +148,10 @@ function Report({seekerReport, employerReport}) {
                   Message User
                 </button>
               </td> */}
-            </tr>
+            </Table.Row>
           ))}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table>
     </div>
   );
 }

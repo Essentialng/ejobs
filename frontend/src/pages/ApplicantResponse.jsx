@@ -33,7 +33,7 @@ function ApplicantResponse() {
       }
     }
     applicationResponse()
-  },[])
+  },[applicationId])
 
   //-------------Fetch and set user details-------------
 
@@ -151,7 +151,7 @@ function ApplicantResponse() {
                 >
                   Resume/CV <span className="text-red-500">*</span>
                 </label>
-                {applicationDetails.resume && <p className='bg-orange-300 p-2 text-white font-semibold'>{applicationDetails.resume}</p>}
+                {applicationDetails.resume && <p className='bg-orange-300 p-2 text-white font-semibold'>{applicationDetails.resume.split('.')[0]}</p>}
                 <DocViewer className='my-2' documents={[{uri: applicationDetails.resume}]}/>
               </div>
               {jobDetails.requireDocumentUpload && (

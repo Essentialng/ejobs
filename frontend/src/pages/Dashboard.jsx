@@ -1,14 +1,14 @@
 //  ----version 2---------
 import React, { useEffect, useState } from 'react';
-import { BiSearch, BiExit } from 'react-icons/bi';
+import { BiSearch, BiExit, BiMenu } from 'react-icons/bi';
 import { GrPieChart, GrGroup } from 'react-icons/gr';
 import { CgProfile, CgScreen } from 'react-icons/cg';
 import { MdReport, MdWork } from 'react-icons/md';
 import Header from '../component/Header';
-import { BsEnvelopeAtFill } from 'react-icons/bs';
+import { BsEnvelopeAtFill, BsMenuUp, BsPeople } from 'react-icons/bs';
 import { FaMoneyBillTransfer } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import DashboardSummary from '../component/DashboardComponents/DashboardSummary';
 import Profile from '../component/DashboardComponents/Profile';
@@ -19,6 +19,8 @@ import BenefitReguests from '../component/DashboardComponents/BenefitReguests';
 import SalaryPayment from '../component/DashboardComponents/SalaryPayment';
 import Report from '../component/DashboardComponents/Report';
 import InterviewsReport from '../component/DashboardComponents/Interview';
+import OtherCandiddates from '../component/DashboardComponents/OtherCandiddates';
+import { setCandidateList } from '../redux/candidateList/candidateListSlice';
 
 const getAllJobURL = `${process.env.REACT_APP_API_URL}job/allJob`;
 const getAllNotificationURL = `${process.env.REACT_APP_API_URL}notification/getAllNotification`;
@@ -28,6 +30,8 @@ const getAllJobSeeker = `${process.env.REACT_APP_API_URL}jobSeeker/allJobSeeker`
 const getAllInterview = `${process.env.REACT_APP_API_URL}interview/getAllInterview`;
 const getJobSeekerReport = `${process.env.REACT_APP_API_URL}employeeReport/getAllEmployeeReport`;
 const getEmployerReport = `${process.env.REACT_APP_API_URL}employerReport/getAllEmployerReport`;
+const getAllCandidates = `${process.env.REACT_APP_API_URL}otherCandidate/getAllCandidate`;
+
 
 const Dashboard = () => {
   const [allJobs, setAllJobs] = useState([]);
@@ -38,8 +42,12 @@ const Dashboard = () => {
   const [selection, setSelection] = useState('home');
   const [interviewData, setInterviewData] = useState([]);
   const currentUser = useSelector((state) => state.user.currentUser);
+  const candidateList = useSelector((state) => state.candidateList.candidateList);
   const [jobSeekerReport, setJobSeekerReport] = useState([]);
   const [jobEmployerReport, setJobEmployerReport] = useState([]);
+  const [allCandidates, setAllCandidates] = useState(null)
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getData = async () => {
@@ -53,6 +61,7 @@ const Dashboard = () => {
           getAllInterview,
           getJobSeekerReport,
           getEmployerReport,
+          getAllCandidates
         ].map(async (eachURL) => {
           const data = await axios.get(eachURL, {
             withCredentials: true,
@@ -72,6 +81,24 @@ const Dashboard = () => {
     getData();
   }, []);
 
+
+  useEffect(()=>{
+    const fetchAllCandidate = ()=>{
+      axios.get(getAllCandidates, {
+        withCredentials: true,
+      }).then((response) => {
+        dispatch(setCandidateList(response.data));
+        console.log('result',response.data);
+        setAllCandidates();
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+
+    fetchAllCandidate();
+  }, [])
+
+
   const renderView = () => {
     switch (selection) {
       case 'profile':
@@ -86,6 +113,8 @@ const Dashboard = () => {
         return <BenefitReguests data={[1, 2]} />;
       case 'salary':
         return <SalaryPayment />;
+      case 'otherCandidates':
+        return <OtherCandiddates data={candidateList}/>;
       case 'reports':
         return (
           <Report
@@ -196,6 +225,14 @@ const Dashboard = () => {
             >
               <CgScreen className='mr-2 text-gray-400' />
               <span className='text-gray-200'>Interviews</span>
+            </div>
+            <div
+              onClick={() => setSelection('otherCandidates')}
+              className={`cursor-pointer ${selection === 'otherCandidates' && 'bg-gray-600'
+                } flex items-center mb-4 p-2 hover:bg-gray-700 rounded`}
+            >
+              <BsPeople className='mr-2 text-gray-400' />
+              <span className='text-gray-200'>Add others</span>
             </div>
             <Link
               to='/signin'

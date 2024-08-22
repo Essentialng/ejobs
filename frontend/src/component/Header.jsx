@@ -133,7 +133,7 @@ function Header({ lightMode }) {
             </li>
           ))}
           {loggedInUser.currentUser && (
-            <>
+            <div>
               <Link
                 to={loggedInUser.currentUser.userType === 'jobSeeker' 
                   ? `/profile/${loggedInUser.currentUser._id}` 
@@ -156,7 +156,7 @@ function Header({ lightMode }) {
               >
                 Logout
               </button>
-            </>
+            </div>
           )}
           {!loggedInUser.currentUser && (
             <Link to="/signin" className="font-semibold uppercase" onClick={() => setShowNav(false)}>

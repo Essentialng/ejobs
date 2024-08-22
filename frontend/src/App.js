@@ -9,7 +9,6 @@ import SingleJob from './pages/SingleJob'
 import JobPage from './pages/JobPage'
 import EmployeePage from './pages/EmployeePage'
 import InterviewPeer from './pages/InterviewPeer'
-// import Video from './pages/InterviewMain';
 import PostJob from './pages/PostJob'
 import EmployeeData from './pages/EmployeeData'
 import Eja from './pages/Eja'
@@ -35,12 +34,48 @@ import EmployeeProfile from './pages/EmployeeProfile';
 import Dashboard from './pages/Dashboard';
 import MakeOffer from './pages/MakeOffer';
 import SearchByCategory from './pages/SearchByCategory';
-import Chat from './pages/Chat';
 import ChatTwo from './pages/ChatTwo';
-import VideoChat from './pages/InterviewMain';
+import VerifyToken from './pages/VerifyToken';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 
 
 function App() {
+
+  const [lastActivity, setLastActivity] = useState(Date.now());
+
+  useEffect(()=>{
+    
+    const interval = setInterval(()=>{
+      const inactiveTime = Date.now() - lastActivity;
+      if(inactiveTime > 30 * 60 * 1000){
+        axios.post('http://localhost:3003/api/v1/auth/signout', {withCredentials: true})
+       .then(res => {
+        window.location.href = '/signin';
+       })
+       .catch(err => {
+          console.log(err);
+        })
+      }
+    }, 60 * 1000)
+
+    const handleUserActivity = ()=>{
+      setLastActivity(Date.now());
+    }
+
+    window.addEventListener('mousemove', handleUserActivity);
+    window.addEventListener('keydown', handleUserActivity);
+
+    return () => {
+      window.removeEventListener('mousemove', handleUserActivity);
+      window.removeEventListener('keydown', handleUserActivity);
+      clearInterval(interval);
+    }
+}, [lastActivity])
+
+
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -82,10 +117,10 @@ function App() {
       path: "/aboutUs",
       element: <AboutUs/>
     },
-    // {
-    //   path: "/interview/:userId",
-    //   element: <SetInterview/>
-    // },
+    {
+      path: "/verifyToken",
+      element: <VerifyToken/>
+    },
     {
       path: "/interview/start/:interviewId",
       element: <InterviewPeer/>
