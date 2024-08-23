@@ -30,7 +30,7 @@ EXPOSE 3002
 
 # Copy a custom Nginx configuration file (if needed)
 # If you're configuring Nginx inside the container:
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
