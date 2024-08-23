@@ -127,6 +127,7 @@ pipeline {
                         echo "
                         server {
                             listen 80;
+                            listen [::]:80;  # This line enables IPv6
                             server_name https://ejobs.ooshinfo.com;
                             location / {
                                 proxy_pass http://13.92.179.121:3002;
