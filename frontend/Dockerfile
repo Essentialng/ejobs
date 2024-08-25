@@ -1,5 +1,5 @@
 # Stage 1: Build the React application
-FROM node:18 AS build
+FROM node:20 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -16,24 +16,20 @@ COPY . .
 # Build the React application
 RUN npm run build
 
-# Stage 2: Serve the application with Nginx
-FROM nginx:alpine
+# Stage 2: Serve the React application with Node.js
+FROM node:20-alpine
 
-# Copy the build output to the Nginx server's default directory
-COPY --from=build /app/build /usr/share/nginx/html
+# Set the working directory
+WORKDIR /app
 
-# Remove the default Nginx configuration file
-# RUN rm /etc/nginx/conf.d/default.conf
+# Copy the build output from the previous stage
+COPY --from=build /app/build /app/build
+
+# Install a simple HTTP server for serving static files
+RUN npm install -g serve
 
 # Expose the application on port 3002
 EXPOSE 3002
 
-# Copy a custom Nginx configuration file (if needed)
-# If you're configuring Nginx inside the container:
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
-
-# Optional: Add a health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s CMD curl -f http://13.92.179.121:3002 || exit 1
+# Serve the application
+CMD ["serve", "-s", "build", "-l", "3002"]
