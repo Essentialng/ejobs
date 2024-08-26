@@ -91,25 +91,50 @@ function Homepage() {
 
 
   // --------Fetch all jobs----------
+  // useEffect(() => {
+  //   const fetchJobs = async () => {
+  //     dispatch(fetchingJobStart());
+  //     try {
+  //       const allJobs = await axios.get(allJobURL, {
+  //         withCredentials: true,
+  //       });
+  //       if (allJobs) dispatch(fetchingJobSuccess(allJobs?.data));
+  //       setAllJob(allJobs?.data);
+  //       setSelectedJobs(allJobs?.data);
+  //       setTotalJobs(allJobs?.data.length);
+  //       performPagination(currentPage, allJobs?.data);
+  //     } catch (error) {
+  //       dispatch(fetchinfJobFailure(error.message));
+  //     }
+  //   };
+  //   fetchJobs();
+  // }, []);
+
+  // --------version2----------
+  
   useEffect(() => {
     const fetchJobs = async () => {
       dispatch(fetchingJobStart());
       try {
-        const allJobs = await axios.get(allJobURL, {
+        const response = await axios.get(allJobURL, {
           withCredentials: true,
         });
-        if (allJobs) dispatch(fetchingJobSuccess(allJobs?.data));
-        setAllJob(allJobs?.data);
-        setSelectedJobs(allJobs?.data);
-        setTotalJobs(allJobs?.data.length);
-        performPagination(currentPage, allJobs?.data);
+        if (response && response.data && Array.isArray(response.data)) {
+          dispatch(fetchingJobSuccess(response.data));
+          setAllJob(response.data);
+          setSelectedJobs(response.data);
+          setTotalJobs(response.data.length);
+          performPagination(currentPage, response.data);
+        } else {
+          throw new Error('Invalid data received from server');
+        }
       } catch (error) {
         dispatch(fetchinfJobFailure(error.message));
+        setAllJob([]);  // Set to empty array if there's an error
       }
     };
     fetchJobs();
   }, []);
-  
 
 
   // ----------handle transition motion----------------
@@ -309,7 +334,7 @@ function Homepage() {
 
 
 {/* -------------------Job by job category------------------------- */}
-{/* <section className="my-20 w-full px-5 sm:px-20 py-16 bg-gray-50">
+<section className="my-20 w-full px-5 sm:px-20 py-16 bg-gray-50">
   <h1 className="text-4xl font-extrabold text-center uppercase mb-6 text-gray-900">
     Popular Job Categories
   </h1>
@@ -317,30 +342,30 @@ function Homepage() {
     By utilizing our paid job listing, your jobs are displayed to more applicants. Joblink.ng is the most visited job platform in Nigeria, ensuring your job postings gain the maximum exposure.
   </p>
   <ul className="flex flex-wrap justify-center gap-8">
-    {[
-      { category: "Administrative assistant", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Administrative assistant".toLocaleLowerCase()).length },
-      { category: "Compliance officer", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Compliance officer".toLocaleLowerCase()).length },
-      { category: "Business development", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Business development".toLocaleLowerCase()).length },
-      { category: "Health service manager", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Health service manager".toLocaleLowerCase()).length },
-      { category: "Management consultant", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Management consultant".toLocaleLowerCase()).length },
-      { category: "Purchasing", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Purchasing".toLocaleLowerCase()).length },
-      { category: "Trade Union Officials", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Trade Union Officials".toLocaleLowerCase()).length },
-      { category: "Software engineer", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Software engineer".toLocaleLowerCase()).length },
-      { category: "Receptionist", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Receptionist".toLocaleLowerCase()).length },
-      { category: "Secretary", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Secretary".toLocaleLowerCase()).length },
-      { category: "Auditing and Accounting", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Auditing and Accounting".toLocaleLowerCase()).length },
-    ].map((item, index) => (
-      <li key={index}>
-        <Link
-          className="text-lg text-gray-800 hover:text-indigo-600 font-medium transition-colors"
-          to={`/searchByCategory/${item.category}`}
-        >
-          {item.category} <span className="text-sm text-gray-500">({item.count})</span>
-        </Link>
-      </li>
-    ))}
-  </ul>
-</section> */}
+  {[
+    { category: "Administrative assistant", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "administrative assistant").length : 0 },
+    { category: "Compliance officer", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "compliance officer").length : 0 },
+    { category: "Business development", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Business development").length : 0 },
+    { category: "Health service manager", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Health service manager").length : 0 },
+    { category: "Management consultant", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Management consultant").length : 0 },
+    { category: "Purchasing", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Purchasing").length : 0 },
+    { category: "Trade Union Officials", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Trade Union Officials").length : 0 },
+    { category: "Software engineer", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Software engineer").length : 0 },
+    { category: "Receptionist", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Receptionist").length : 0 },
+    { category: "Secretary", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Secretary").length : 0 },
+    { category: "Auditing and Accounting", count: Array.isArray(allJob) ? allJob.filter(eachJob => eachJob.jobTitle.toLowerCase() === "Auditing and Accounting").length : 0 },
+].map((item, index) => (
+  <li key={index}>
+    <Link
+      className="text-lg text-gray-800 hover:text-indigo-600 font-medium transition-colors"
+      to={`/searchByCategory/${item.category}`}
+      >
+      {item.category} <span className="text-sm text-gray-500">({item.count})</span>
+    </Link>
+  </li>
+))}
+</ul>
+</section>
 
 {/* -------------------Job by job category------------------------- */}
 
