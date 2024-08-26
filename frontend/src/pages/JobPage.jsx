@@ -5,6 +5,8 @@ import { MdCancel } from "react-icons/md";
 import SearchComponent from "../component/SearchComponent";
 import JobPostJobPage from "../component/JobPostJobPage";
 import Header from "../component/Header";
+import { useLocation, useNavigate } from "react-router-dom";
+import qs from 'query-string'
 
 function JobPage() {
   const apiRoute = process.env.REACT_APP_API_URL;
@@ -14,6 +16,10 @@ function JobPage() {
   const [filterList, setFilterList] = useState([]);
   const [mainSearchForm, setMainSearchForm] = useState({});
   const baseURL = `${apiRoute}job/allJob`;
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const { jobTitle, workType, state } = qs.parse(location.search);
 
   useEffect(() => {
     const getAllJobs = async () => {
@@ -22,23 +28,56 @@ function JobPage() {
           withCredentials: true
         });
         setAllJobs(fetchJobs.data);
-        setFilteredJobs(fetchJobs.data);
+        applyFilters(fetchJobs.data, { jobTitle, workType, state });
       } catch (error) {
         setErrorMessage("Error fetching jobs");
       }
     };
     getAllJobs();
-  }, []);
+  }, [jobTitle, workType, state]);
+
+  const applyFilters = (jobs, filters) => {
+    let filteredResults = jobs;
+    
+    if (filters.jobTitle) {
+      filteredResults = filteredResults.filter(job => 
+        job.jobTitle.toLowerCase().includes(filters.jobTitle.toLowerCase())
+      );
+    }
+    
+    if (filters.workType) {
+      filteredResults = filteredResults.filter(job => 
+        job.workType.toLowerCase() === filters.workType.toLowerCase()
+      );
+    }
+    
+    if (filters.state) {
+      filteredResults = filteredResults.filter(job => 
+        job.state.toLowerCase() === filters.state.toLowerCase()
+      );
+    }
+
+    setFilteredJobs(filteredResults);
+  };
 
   const handleClearFilter = () => {
     setFilterList([]);
     setFilteredJobs(allJobs);
+    navigate('/jobs');
   };
 
   const addFilterElement = (e) => {
     const selectedElement = e.target.value;
     const title = e.target.name;
-    const updatedFilteredJobs = allJobs.filter(
+    if(title === 'workOrder'){
+      if (selectedElement === 'latest') {
+        setFilteredJobs([...filteredJobs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+      } else if (selectedElement === 'oldest') {
+        setFilteredJobs([...filteredJobs].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)));
+      }
+      return;
+    }
+    const updatedFilteredJobs = filteredJobs.filter(
       (eachJob) => eachJob[title].toLowerCase() === selectedElement.toLowerCase()
     );
     setFilteredJobs(updatedFilteredJobs);
@@ -59,27 +98,8 @@ function JobPage() {
 
   const searchByFilter = (e) => {
     e.preventDefault();
-    const filterJob = filteredJobs.filter((eachJob) => {
-      return (
-        (mainSearchForm.jobTitle
-          ? typeof eachJob.jobTitle === "string" &&
-            eachJob.jobTitle.toLowerCase() === mainSearchForm.jobTitle.toLowerCase()
-          : true) &&
-        (mainSearchForm.industry
-          ? typeof eachJob.industry === "string" &&
-            eachJob.industry.toLowerCase() === mainSearchForm.industry.toLowerCase()
-          : true) &&
-        (mainSearchForm.state
-          ? typeof eachJob.state === "string" &&
-            eachJob.state.toLowerCase() === mainSearchForm.state.toLowerCase()
-          : true) &&
-        (mainSearchForm.workType
-          ? typeof eachJob.workType === "string" &&
-            eachJob.workType.toLowerCase() === mainSearchForm.workType.toLowerCase()
-          : true)
-      );
-    });
-    setFilteredJobs(filterJob);
+    applyFilters(allJobs, mainSearchForm);
+    navigate(`/jobs?${qs.stringify(mainSearchForm)}`);
   };
 
   return (
@@ -108,7 +128,7 @@ function JobPage() {
         <h2 className="mb-4 text-xl font-semibold text-gray-600 capitalize">Jobs in Nigeria</h2>
         <div className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
           <span className="text-gray-600">Filter Applied</span>
-          <button onClick={handleClearFilter} className="text-sm text-orange-500 hover:underline">Clear all</button>
+          <button onClick={handleClearFilter} className="text-sm text-orange-500 hover:underline animate-bounce">Clear all</button>
         </div>
         <div className="flex flex-wrap items-center gap-4 py-4">
           {filterList.map((filter, index) => (
@@ -120,12 +140,16 @@ function JobPage() {
         </div>
         <span className="font-bold text-orange-500">{allJobs.length} jobs found</span>
       </div>
-      <div className="p-4 border-2 border-gray-300 rounded-lg shadow-md">
+
+
+      <form className="p-4 border-2 border-gray-300 rounded-lg shadow-md">
         <h2 className="mb-4 text-xl font-semibold text-gray-600 capitalize">Filter Results</h2>
         <div className="flex items-center justify-between pl-2 mb-4 py-1 bg-gray-100 rounded-md">
           <span className="text-gray-600">Filter Applied</span>
           <button className="px-4 py-1.5 text-sm text-white bg-orange-500 rounded-md hover:bg-orange-600">Search</button>
         </div>
+
+
         <div className="space-y-3">
           <select name="jobFunction" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Job function</option>
@@ -133,33 +157,41 @@ function JobPage() {
               <option key={index} value={func}>{func}</option>
             ))}
           </select>
+
+
           <select name="industry" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Industry</option>
             {jobIndustries.map((industry, index) => (
               <option key={index} value={industry}>{industry}</option>
             ))}
           </select>
+
+
           <select name="state" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
-            <option value="" disabled selected>Location</option>
+            <option value="" disabled selected>Work type</option>
             {workTypes.map((type, index) => (
               <option key={index} value={type}>{type}</option>
             ))}
           </select>
+
+
           <select name="workType" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Job Skills</option>
             {jobSkills.map((skill, index) => (
               <option key={index} value={skill}>{skill}</option>
             ))}
           </select>
+
+
           <select name="workOrder" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
-            <option value="Order by">Order by</option>
+            <option value="Order by" disabled>Order by</option>
             <option value="Latest">Latest</option>
             <option value="Starred">Starred</option>
             <option value="Popular">Popular</option>
           </select>
           <button className="w-full py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600">Reset Filter</button>
         </div>
-      </div>
+      </form>
     </div>
       </div>
     </div>

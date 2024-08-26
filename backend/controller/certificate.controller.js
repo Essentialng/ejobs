@@ -2,6 +2,7 @@ import { customError } from "../middlewares/errorHandler.js"
 import JobSeeker from "../model/jobSeeker.model.js"
 import certificateModel from "../model/certificate.model.js"
 
+
 export const getUserCertificate = async(req,res, next)=>{
     const certificateId = req.body.certificateId
     if(!certificateId) next(customError(400, 'Kindly provide the necessary data'))
@@ -17,7 +18,6 @@ export const getUserCertificate = async(req,res, next)=>{
 
 export const createUserCertificate =async (req,res, next)=>{
     const formData = req.body
-    console.log({for: formData});
     const userId = req.body.user
     if(!userId){
         return next(customError(400, "Kindly provide all necessary data"))
@@ -36,6 +36,8 @@ export const createUserCertificate =async (req,res, next)=>{
         return next(error)
     }
 }
+
+
 export const updateUserCertificate =async (req,res, next)=>{
     const certificateId = req.body.certificateId
     if(!certificateId) return next(customError(400, "Kindly provide the necessary details"))

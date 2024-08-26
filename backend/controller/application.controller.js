@@ -45,12 +45,14 @@ export const getUserApplication = async(req,res, next)=>{
 export const getAnApplication = async(req,res, next)=>{
     const applicantionId = req.body.applicantionId
     if(!applicantionId) next(customError(400, "Kindly provide the necessary details"))
-    try {
-        const fetchedApplication = await applicationModel.findById(applicantionId)
+        try {
+    const fetchedApplication = await applicationModel.findById(applicantionId)
         .populate('applicant')
         .populate('interviews')
         .populate('companyId')
+        .populate('job')
         .exec();
+        if(!fetchedApplication) next(customError(404, "No application found for the provided applicant ID"));
         res.status(200).json(fetchedApplication)
         } catch (error) {
             next(error)
@@ -91,6 +93,8 @@ export const getAllApplication = async(req, res, next)=>{
 }
 export const updateApplication = async(req,res,next)=>{
     const applicationId = req.body.applicationId
+    const formData = req.body
+    console.log({first: applicationId})
     if(!applicationId) next(customError(400, "Kindly provide all necessary data"))
     try {
         const updateStatus = await applicationModel.findByIdAndUpdate(applicationId, {
@@ -100,6 +104,8 @@ export const updateApplication = async(req,res,next)=>{
         next(error)
     }
 }
+
+
 export const deleteApplication = async(req,res,next)=>{
     const applicationId = req.params.applicationId
     if(!applicationId) next(400, "Kindly provide the necessary details")

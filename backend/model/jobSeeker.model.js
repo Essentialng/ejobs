@@ -126,7 +126,20 @@ const jobSeekerSchema = new Schema({
     benefits:{
         type:[Schema.Types.ObjectId],
         ref: "benefitSchema",
-    }
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    lastLogin: {
+        type: Date,
+        default: Date.now
+    },
+    resetPasswordToken: String,
+    resetPaswordExpiresAt: Date,
+    verifyEmailToken: String,
+    verifyEmailExpiresAt: Date
+
 },{timestamps: true})
 
 const JobSeeker = mongoose.model('jobSeeker', jobSeekerSchema)

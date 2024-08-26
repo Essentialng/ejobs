@@ -36,16 +36,16 @@ function StepTwo(props) {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
         <div className="sm:w-1/2 w-4/5 relative">
-                <h3 className='cursor-pointer sm:absolute relative text-center top-0 right-0 py-0.5 border-[1px] border-red-600 hover:bg-white hover:text-red-500 px-4 bg-red-500 text-slate-50' onClick={handlePrevious}>back</h3>
+                <button className='cursor-pointer sm:absolute relative text-center top-0 right-0 py-0.5 border-[1px] border-red-600 hover:bg-white hover:text-red-500 px-4 bg-red-500 text-slate-50' onClick={handlePrevious}>back</button>
             <div className="">
                 <h3 className='font-md mb-2 text-center'>Choose what best describes you</h3>
             </div>
-            <div className="sm:flex sm:flex-row flex-col items-center justify-center gap-8">
-                <div onClick={handleJobseeker} className={`relative cursor-pointer border-2 after:absolute ${userType === 'jobSeeker' ? "after:bg-orange-600":"after:bg-black"} after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-55`}>
+            <div className="sm:flex sm:flex-row flex-col items-center justify-center gap-8 border-none">
+                <div onClick={handleJobseeker} className={`relative w-1/2 cursor-pointer border-2 after:absolute ${userType === 'jobSeeker' ? "after:bg-orange-600":"after:bg-black"} after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-55`}>
                     <img src={JobSeeker} alt="job seeker" />
                     <h3 className='z-20 text-white absolute bottom-1/2 text-xl font-semibold left-1/2'>Job seeker</h3>
                 </div>
-                <div onClick={handleEmployer} className={`relative cursor-pointer border-2 after:absolute ${userType === 'jobEmployer' ? "after:bg-orange-600":"after:bg-black"} after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-55`}>
+                <div onClick={handleEmployer} className={`relative w-1/2 cursor-pointer border-2 after:absolute ${userType === 'jobEmployer' ? "after:bg-orange-600":"after:bg-black"} after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-55`}>
                     <img src={Employer} alt="job employer" />
                     <h3 className='z-20 text-white absolute bottom-1/2 text-xl font-semibold left-1/2'>Employer</h3>
                 </div>

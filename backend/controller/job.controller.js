@@ -23,11 +23,18 @@ export const createJob = async(req, res, next)=>{
 
 
 export const getAllJobs =async (req,res,next)=>{
+    const params = req.query
+    const paramsKey = Object.keys(params)[0]
     try {
         const allJobs = await jobModel.find()
         .populate('employer')
         .populate('numberOfApplicant')
         .populate('applications').exec()
+        if(params){
+            console.log(allJobs.filter(eachJob=>{
+                eachJob.paramsKey === params.paramsKey
+            }))
+        }
         res.status(200).json(allJobs)   
     } catch (error) {
         next(error)

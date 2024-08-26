@@ -2,7 +2,7 @@ import FilterComponent from "../component/FilterComponent";
 import Header from "../component/Header";
 import JobPostJobPage from "../component/JobPostJobPage";
 import SearchComponent from "../component/SearchComponent";
-import BackgroundImage from "../assets/Images/employer.png";
+import BackgroundImage from "../assets/Images/location.jpg";
 import FooterComponent from "../component/Footer";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -24,7 +24,6 @@ function SearchByLocation() {
     window.scroll(0,0)
     console.log();
     const capitalizeString = (aString)=>{
-    // console.log({str: aString.split('').splice(0, 1)});
     let capitalizeString = ''
     const newString = aString.split('')
     const strLength = aString.length

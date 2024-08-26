@@ -76,14 +76,14 @@ function StepOne(props) {
         <div className="w-screen h-screen flex items-center justify-center p-2 sm:p-10">
             <div 
                 style={{ backgroundImage: `url(${Background})` }} 
-                className="relative w-screen sm:w-2/3 sm:h-4/5 h-screen bg-cover bg-center p-10 flex items-center justify-center after:absolute after:bg-black after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-60"
+                className="relative w-screen sm:w-2/3 sm:h-full h-screen bg-cover bg-center flex items-center justify-center after:absolute after:bg-black after:z-10 after:top-0 after:left-0 after:w-full after:h-full after:opacity-60"
             >
-                <form className='relative z-20 text-white w-full max-w-md'>
+                <form className='relative z-20 max-w-md bg-white p-8 rounded-lg shadow-md w-3/4 text-gray-800'>
                     <div className="mb-4">
                         <label className='block mb-2 font-medium' htmlFor="email">Email</label>
                         <input 
                             id="email" 
-                            className='text-gray-700 w-full px-4 py-2 outline-none rounded-md' 
+                            className='w-full px-4 py-2 outline-none rounded-md border' 
                             required 
                             onChange={handleChange} 
                             name="email" 
@@ -95,7 +95,7 @@ function StepOne(props) {
                         <label className='block mb-2 font-medium' htmlFor="password">Password</label>
                         <input 
                             id='password' 
-                            className='text-gray-700 w-full px-4 py-2 outline-none rounded-md' 
+                            className='text-gray-700 w-full px-4 py-2 outline-none rounded-md border' 
                             required 
                             onChange={handleChange} 
                             name="password" 
@@ -107,7 +107,7 @@ function StepOne(props) {
                         <label className='block mb-2 font-medium' htmlFor="retype-password">Retype Password</label>
                         <input 
                             id='retype-password' 
-                            className='text-gray-700 w-full px-4 py-2 outline-none rounded-md' 
+                            className='text-gray-700 w-full px-4 py-2 border outline-none rounded-md' 
                             required 
                             onChange={isPasswordMatch} 
                             type="password" 

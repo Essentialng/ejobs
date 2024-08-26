@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from 'react'
 import { CgMore } from 'react-icons/cg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MessageModal from '../Modals/Mesage';
 
 const GeneralTable = ({ currentList, handleNavigation, data }) => {
   const [viewMoreStates, setViewMoreStates] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentApplicant, setCurrentApplicant] = useState('');
+  const navigate = useNavigate()
 
   const handleView = useCallback((index) => {
     setViewMoreStates(prev => ({
@@ -47,14 +48,11 @@ const GeneralTable = ({ currentList, handleNavigation, data }) => {
             <th className="px-4 py-4 text-sm font-medium text-gray-500 uppercase">
               Remark
             </th>
-            {/* <th className="px-4 py-4 text-sm font-medium text-gray-500 uppercase">
-              More
-            </th> */}
           </tr>
         </thead>
         <tbody>
           {currentList.map((eachData, index) => (
-            <tr key={index} className="cursor-pointer hover:bg-orange-100 hover:text-slate-50 mt-4">
+            <tr onClick={()=>{navigate(`/${eachData.job._id}/applicantResponse`)}} key={index} className="cursor-pointer hover:bg-orange-100 hover:text-slate-50 mt-4">
               <td className="text-xs font-medium text-gray-500 px-6 py-4 tracking-wider">{index + 1}</td>
               <td className="text-xs font-medium text-gray-500 px-6 py-4 tracking-wider">{`${eachData.applicant[0].firstName} ${eachData.applicant[0].lastName}`}</td>
               <td className="text-xs font-medium text-gray-500 px-6 py-4 tracking-wider">{eachData.job.jobTitle}</td>
@@ -62,15 +60,6 @@ const GeneralTable = ({ currentList, handleNavigation, data }) => {
               <td className="text-xs font-medium text-gray-500 px-6 py-4 tracking-wider">{eachData.createdAt.split('T')[1].split(".")[0]}</td>
               <td className="text-xs font-medium text-gray-500 px-6 py-4 tracking-wider">{eachData.availability}</td>
               <td className={`text-xs font-medium text-gray-500 px-6 py-4 tracking-wider`}>{eachData.status}</td>
-              {/* <td onClick={() => handleView(index)} className='text-xs font-medium text-gray-500 px-6 py-4 tracking-wider relative hover:text-orange-700 hover:bg-orange-200 cursor-pointer'>
-                <CgMore className='mx-auto' />
-                <div className={`${viewMoreStates[index] ? "block" : "hidden"} absolute -right-48 z-10 -bottom-24 bg-orange-950 p-4 text-white w-48 rounded-sm`}>
-                  <button className='py-1 rounded-sm hover:bg-white w-full text-start px-2 hover:text-orange-950'><Link to={`/${eachData.job._id}/applicantResponse`}>Schedule for interview</Link></button>
-                  <button onClick={() => { handleModal(); selectApplicant(eachData.applicantName); }} className='py-1 rounded-sm hover:bg-white w-full text-start px-2 hover:text-orange-950'>Send a Message</button>
-                  <button className='py-1 rounded-sm hover:bg-white w-full text-start px-2 hover:text-orange-950'><Link to={`tel:${eachData.applicant[0].phoneNumber}`}>Call Applicant</Link></button>
-                  <button onClick={() => selectApplicant(eachData.applicantName)} className='py-1 rounded-sm hover:bg-white w-full text-start px-2 hover:text-orange-950'>View Profile</button>
-                </div>
-              </td> */}
             </tr>
           ))}
         </tbody>

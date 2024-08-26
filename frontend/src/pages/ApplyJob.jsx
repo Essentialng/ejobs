@@ -73,6 +73,7 @@ function ApplyJob() {
       dispatch(addApplication(applicationResponse.data))
       toast.success('Applied')
       setLoading(false)
+      navigate('/jobs')
     } catch (error) {
       console.log(error)
       toast.error('Error try again later')
@@ -251,23 +252,6 @@ function ApplyJob() {
             </div>
             </div>
 
-            {/* -----------Additional document section------------ */}
-            
-            {/* {jobDetails.requireDocumentUpload && (
-              <div className="my-4">
-                <label htmlFor="additionalDocument" className="mb-2">
-                  Additional Document
-                </label>
-                <div className="my-2 p-2 border-2 border-slate-300 w-2/3 bg-slate-200">
-                  <input
-                    name="additionalDocument"
-                    type="file"
-                    className="bg-slate-50 rounded-md"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-            )} */}
             {errorMessage && <span className="px-4 py-1 bg-red-300 text-red-600 font-semibold my-4">{errorMessage}</span>}
             <div className="my-4 flex items-center justify-center gap-8">
               <Link

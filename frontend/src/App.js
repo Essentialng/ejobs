@@ -34,9 +34,49 @@ import EmployeeProfile from './pages/EmployeeProfile';
 import Dashboard from './pages/Dashboard';
 import MakeOffer from './pages/MakeOffer';
 import SearchByCategory from './pages/SearchByCategory';
+import ChatTwo from './pages/ChatTwo';
+import VerifyToken from './pages/VerifyToken';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import NewPassword from './pages/NewPassword';
+
 
 
 function App() {
+
+  const [lastActivity, setLastActivity] = useState(Date.now());
+
+  useEffect(()=>{
+    
+    const interval = setInterval(()=>{
+      const inactiveTime = Date.now() - lastActivity;
+      if(inactiveTime > 30 * 60 * 1000){
+        axios.post('http://localhost:3003/api/v1/auth/signout', {withCredentials: true})
+       .then(res => {
+        window.location.href = '/signin';
+       })
+       .catch(err => {
+          console.log(err);
+        })
+      }
+    }, 60 * 1000)
+
+    const handleUserActivity = ()=>{
+      setLastActivity(Date.now());
+    }
+
+    window.addEventListener('mousemove', handleUserActivity);
+    window.addEventListener('keydown', handleUserActivity);
+
+    return () => {
+      window.removeEventListener('mousemove', handleUserActivity);
+      window.removeEventListener('keydown', handleUserActivity);
+      clearInterval(interval);
+    }
+}, [lastActivity])
+
+
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -78,12 +118,12 @@ function App() {
       path: "/aboutUs",
       element: <AboutUs/>
     },
-    // {
-    //   path: "/interview/:userId",
-    //   element: <SetInterview/>
-    // },
     {
-      path: "/interview/start",
+      path: "/verifyToken",
+      element: <VerifyToken/>
+    },
+    {
+      path: "/interview/start/:interviewId",
       element: <InterviewPeer/>
     },
     {
@@ -99,9 +139,13 @@ function App() {
       element: <Quickjob/>
     },
     {
+      path: "/chat",
+      element: <ChatTwo/>
+    },
+    {
       path: "/searchByLocation/:locationId",
       element: <SearchByLocation/>
-    },
+  },
     {
       path: "/searchByCategory/:categoryName",
       element: <SearchByCategory/>
@@ -177,6 +221,10 @@ function App() {
     {
       path: "/signup",
       element: <SignupPages/>
+    },
+    {
+      path: "/newPassword/:token/:userId",
+      element: <NewPassword/>
     }
   ])
   return (

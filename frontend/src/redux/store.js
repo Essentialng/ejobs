@@ -17,6 +17,9 @@ import EmployerJobReducer from './employerJob/employerJobSlice.js'
 import CompanyContactReducer from './companyContact/companyContact.js'
 import ReportMade from './reportMade/reportMadeSlice.js'
 import ReportGotten from './reportGotten/reportGottenSlice.js'
+import EmployerProof from './employerProof/employerProofSlice.js'
+import EmployerAddressProof from './employerAddressProof/employerAddressProofSlice.js'
+import CandidateList from './candidateList/candidateListSlice.js'
 
 
 
@@ -35,7 +38,10 @@ const rootReducer = combineReducers({
   EmployerListedJob: EmployerJobReducer,
   CompanyContact: CompanyContactReducer,
   ReportMade: ReportMade,
-  ReportGotten: ReportGotten
+  ReportGotten: ReportGotten,
+  employerProof: EmployerProof,
+  employerAddressProof: EmployerAddressProof,
+  candidateList: CandidateList,
 })
 
 const persistConfig = {

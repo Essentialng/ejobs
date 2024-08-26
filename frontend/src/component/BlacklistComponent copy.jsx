@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { FaLocationPin } from "react-icons/fa6";
 import { GrLocationPin } from "react-icons/gr";
-import { PiListBulletsBold } from "react-icons/pi";
 
 function BlacklistComponent({companyName, companyAddress, complaint}) {
   const [showComplaint, setShowComplaint] = useState(false)

@@ -20,12 +20,16 @@ import { setSalaryPaidList } from "../redux/salaryPaid/salaryPaid";
 import { setSalaryRecievedList } from "../redux/salaryRecieved/salaryRecieved";
 import { setReportMadeList } from "../redux/reportMade/reportMadeSlice";
 import { setReportGottenList } from "../redux/reportGotten/reportGottenSlice";
+import { setEmployerProofList } from "../redux/employerProof/employerProofSlice";
+import ForgetPassword from "../component/Modals/ForgetPassword";
+
 
 
 
 
 function SigninPages() {
     const baseURL = `${process.env.REACT_APP_API_URL}auth/signin`;
+    const forgetURL = `${process.env.REACT_APP_API_URL}forgetPasword/`
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         userType:'jobSeeker'
@@ -33,11 +37,44 @@ function SigninPages() {
     const { loading, error } = useSelector(state => state.user);
     const dispatch = useDispatch();
 
+
+    // ------forget password----------
+    const [forgetPasswordData, setForgetPasswordData] = useState({})
+    const [forgetPassowrd, setForgetPassword] = useState(false)
+    const [loadingForget, setLoadingForget] = useState(false)
+
+
     // ----------Handle form change-------------
     const handleChange = (e) => {
         dispatch(signinFailure(null));
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    // -----------handle forget form data----------
+    const handleForgetPasswordChange = (e) => {
+        e.preventDefault()
+        setForgetPasswordData({...forgetPasswordData, [e.target.name]: e.target.value });
+    };
+
+
+
+    // ----------Handle forget password-------------
+    const handleForgetPassword = async(e) => {
+        e.preventDefault()
+        setLoadingForget(true)
+        try {
+            await axios.post(forgetURL, forgetPasswordData, {withCredentials: true})
+            setLoadingForget(false)
+            setForgetPassword(!forgetPassowrd);
+        } catch (error) {
+            setLoadingForget(false)
+            console.log(error)
+        }
+    };
+
+const handleForgetPasswordToggle = ()=>{
+    setForgetPassword(!forgetPassowrd)
+}
 
 
 // ------------Handle signin----------------
@@ -79,6 +116,7 @@ function SigninPages() {
                         dispatch(setSalaryPaidList(data.salaryPaid))
                         dispatch(setReportMadeList(data.reportMade))
                         dispatch(setReportGottenList(data.reportGotten))
+                        dispatch(setEmployerProofList(data.proofOfCompany))
                         break;
                     case 'admin':
                     break;
@@ -104,7 +142,7 @@ function SigninPages() {
             
             <div 
                 style={{ backgroundImage: `url(${Background})` }} 
-                className="relative w-full h-full sm:w-2/3 sm:h-4/5 bg-cover bg-center flex items-center justify-center"
+                className="relative w-full h-full sm:w-2/3 sm:h-full bg-cover bg-center flex items-center justify-center"
             >
                 <div className="absolute inset-0 bg-black opacity-50"></div>
                 <form className="relative z-10 bg-white p-8 rounded-lg shadow-md sm:w-1/2 w-3/4 text-gray-800">
@@ -155,6 +193,7 @@ function SigninPages() {
                     <div className="mt-4 text-center">
                         <p>Don't have an account? <Link className="text-blue-500 hover:underline" to='/signup'>Sign up</Link></p>
                     </div>
+                    <button className="text-blue-500 font-semibold text-base underline" onClick={handleForgetPasswordToggle}>Forget password</button>
                     <button 
                         className="w-full py-2 mt-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition duration-200"
                     >
@@ -162,6 +201,7 @@ function SigninPages() {
                     </button>
                 </form>
             </div>
+            {forgetPassowrd && <ForgetPassword change={(e)=>{handleForgetPasswordChange(e)}} click={handleForgetPassword} toggle={handleForgetPasswordToggle}/>}
         </div>
     );
 }

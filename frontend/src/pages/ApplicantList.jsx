@@ -104,36 +104,12 @@ function ApplicantList() {
   };
 
   const handleInterview = (e) => {
+    const interviewLength = scheduledApplicant[0].interviews.length
+    const interviewId = scheduledApplicant[0].interviews[interviewLength - 1]._id
     if (e.target.innerHTML === "Start") {
-      navigate("/interview/start");
+      navigate(`/interview/start/${interviewId}`);
     }
   };
-
-  // const handleAcceptance = async(applicationId)=>{
-  //   const currentDate = new Date();
-  //   const year = currentDate.getFullYear();
-  //   const month = currentDate.getMonth() + 1; 
-  //   const day = currentDate.getDate();
-  //   try {
-  //     const updateResponse =await axios.put(updateApplication, {applicationId:applicationId, status: "Hired", dateHired: `Year: ${year}, Month: ${month}, Day: ${day}`}, {
-  //       withCredentials: true
-  //     })
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  // const handleRejection = async(applicationId)=>{
-  //   try {
-  //     const updateResponse = await axios.put(updateApplication, {applicationId:applicationId, status: "Rejected"}, {
-  //       withCredentials: true
-  //     })
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-
 
   return (
     <div className="w-screen h-screen overflow-hidden bg-orange-50">

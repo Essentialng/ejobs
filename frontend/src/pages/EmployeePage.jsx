@@ -6,7 +6,7 @@ import ProfileData from "../component/ProfileData";
 import Header from "../component/Header";
 import FooterComponent from "../component/Footer";
 import { useSelector } from "react-redux";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { hiredApplicantList } from "../assets/data";
@@ -17,6 +17,11 @@ import companyContact, { setCompanyContact, updateCompanyContact } from "../redu
 import ProfileInput from "../component/ProfileInput";
 import { updateUser } from "../redux/users/userSlice";
 import { convertToBase64 } from "../Utils/fileConverter";
+import Premises from '../assets/Images/energy.jpg'
+import ProofOfExistenceModal from "../component/ProofOfExistenceModal";
+import { addNewEmployerProof, removeAnEmployerProof, updateAnEmployerProof } from "../redux/employerProof/employerProofSlice";
+import ProofOfAddressModal from "../component/ProofOfAddressModal";
+import { addNewemployerAddressProof, removeAnemployerAddressProof } from "../redux/employerAddressProof/employerAddressProofSlice";
 
 
 function EmployeePage() {
@@ -24,37 +29,85 @@ function EmployeePage() {
   const listedJobs = useSelector((state)=>state.EmployerListedJob.employerJobList)
   const hiredApplicantList = useSelector((state)=>state.HiredList.hiredList)
   const companyContact = useSelector((state=>state.CompanyContact.companyContact))
+  const employerProofData = useSelector((state=>state.employerProof.employerProofList))
+  const employerAddressProofData = useSelector((state=>state?.employerAddressProof?.employerAddressProofList))
   const [profileUpdateListener, setProfileUpdateListener] = useState(false)
-  const [companyContactPerson, setCompanyContactPerson] = useState({contactId: currentUser.currentUser.contactPerson?._id || null});
+  const [companyContactPerson, setCompanyContactPerson] = useState({contactId: currentUser.currentUser.contactPerson?._id || null, company: currentUser.currentUser._id});
   const [companyProfile, setCompanyProfile] = useState({})
-
+  // const [employerProofs, setEmployerProofs] = useState(employerProofData)
   
 // -----Image previews-------
 const [previewImage, setPreviewImage] = useState(null)
 
 
+// ------------Proof of ownership-----------
+const [proofOfOwnerShip, setProofOfOwnerShip] = useState(false)
+const [proofUpdateListener, setProofUpdateListener] = useState(false)
+const [proofData, setProofData] = useState({})
 
-  // ----------URL Links---------------
+// ------------Proof of Address-----------
+const [proofOfAddress, setProofOfAddress] = useState(false)
+const [proofOfAddressListener, setProofOfAddressListener] = useState(false)
+const [proofOfAddressData, setProofOfAddressData] = useState({})
+
+
+// ----------URL Links---------------
   const createPersonURL = `${process.env.REACT_APP_API_URL}contactPerson/createContact`;
   const getjobURL = `${process.env.REACT_APP_API_URL}job/getAJob`;
   const updatePerson = `${process.env.REACT_APP_API_URL}contactPerson/updateContact`;
   const updateCompanyProfile = `${process.env.REACT_APP_API_URL}jobrecruiter/updateJobEmployer`
+  const createProof = `${process.env.REACT_APP_API_URL}proof/createProof`
+  const deleteProofURL = `${process.env.REACT_APP_API_URL}proof/deleteProof`
+  const createAddressProof = `${process.env.REACT_APP_API_URL}addressProof/createAddressProof`
+  const deleteAddressProofURL = `${process.env.REACT_APP_API_URL}proof/deleteAddressProof`
 
 
-
-  // ----------loaders------------
+// ----------loaders------------
   const [loadingProfile, setLoadingProfile] = useState(false)
   const [contactLoader, setContactLoader] = useState(false)
 
   const dispatch = useDispatch() 
   const navigate = useNavigate();
   
+// ---------------fetch images--------------
+const [fetchedImages, setFetchedImages] = useState({});
+  const fetchingRef = useRef({});
+
+  const fetchImage = useCallback(async (proofId, imageUrl) => {
+    if (fetchedImages[proofId] || fetchingRef.current[proofId]) return;
+
+    fetchingRef.current[proofId] = true;
+    const getProofURL = `${process.env.REACT_APP_API_URL}getImage`;
+
+    try {
+      const response = await axios.get(`${getProofURL}/${imageUrl}`, {
+        responseType: 'blob'
+      });
+      const imageBlob = URL.createObjectURL(response.data);
+      setFetchedImages(prev => ({ ...prev, [proofId]: imageBlob }));
+      dispatch(updateAnEmployerProof({ _id: proofId, imageBlob }));
+    } catch (error) {
+      console.error('Error fetching image:', error);
+    } finally {
+      fetchingRef.current[proofId] = false;
+    }
+  }, [dispatch, fetchedImages]);
+
+  useEffect(() => {
+    return () => {
+      Object.values(fetchedImages).forEach(blob => {
+        if (blob.startsWith('blob:')) {
+          URL.revokeObjectURL(blob);
+        }
+      });
+    };
+  }, [fetchedImages]);
+
 
 // ------------Handle form change-------------
   const handleContactChange = (e) => {
     setCompanyContactPerson({ ...companyContactPerson, [e.target.name]: e.target.value });
   };
-
 
 
 // ------------Handle Profile update--------------
@@ -86,6 +139,8 @@ const handleChangeProfile = (e)=>{
     setCompanyProfile(updatedProfileInfo)
     setProfileUpdateListener(true)
   }
+
+
 
 // -----------------------Handling Image change--------------------------
 const handleAvatar = async(e)=>{
@@ -137,8 +192,109 @@ const handleAvatar = async(e)=>{
   }
 
 
+  // -------------Handle proof of ownership-------------
+  const toggleAddProof = ()=>{
+    setProofOfOwnerShip(!proofOfOwnerShip)
+  }
+
+  const handleProofData = (e)=>{
+    setProofData({...proofData, [e.target.name]: e.target.value})
+  }
+
+  const handleProofImage= async(e)=>{
+    const file = e.target.files[0]
+    setProofData({...proofData, image: file})
+  }
+
+  const handleSendProof = async()=>{
+    setProofUpdateListener(true);
+    // ---------Send data to the backend----------
+    const formData = new FormData()
+    formData.append('companyId', currentUser.currentUser._id)
+    formData.append('title', proofData.proofName)
+    formData.append('description', proofData.proofDescription)
+    formData.append('image', proofData.image)
+    try{
+      const proofResponse = await axios.post(createProof, formData, {
+        headers:{
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      dispatch(addNewEmployerProof(proofResponse.data))
+      setProofUpdateListener(false);
+    }catch(error){
+      console.log(error)
+      setProofUpdateListener(false);
+    }
+    setProofOfOwnerShip(!proofOfOwnerShip)
+  }
+
+  const handleDeleteProof = async(proofId)=>{
+    try {
+      const deleteProof = await axios.delete(`${deleteProofURL}/${proofId}`, {withCredentials: true})
+      dispatch(removeAnEmployerProof(deleteProof.data))
+    } catch (error) {
+      
+    }
+  }
+
+// -------------End of Proof-------------
+
+
+// --------------Handle proof of address----------------
+const toggleAddAddress = ()=>{
+  setProofOfAddress(!proofOfAddress)
+}
+
+const handleAddressProofData = (e)=>{
+  setProofData({...proofData, [e.target.name]: e.target.value})
+}
+
+const handleAddressProofImage= async(e)=>{
+  const file = e.target.files[0]
+  setProofData({...proofData, image: file})
+}
+
+
+const handleSendAddressProof = async()=>{
+  setProofOfAddress(true);
+  // ---------Send data to the backend----------
+  console.log('address', {proofOfAddressData})
+  const formData = new FormData()
+  formData.append('companyId', currentUser.currentUser._id)
+  formData.append('title', proofOfAddressData.proofName)
+  formData.append('description', proofOfAddressData.proofDescription)
+  formData.append('image', proofOfAddressData.image)
+  try{
+    console.log({formData})
+  //   const proofResponse = await axios.post(createAddressProof, formData, {
+  //     headers:{
+  //       'Content-Type': 'multipart/form-data'
+  //     }
+  //   })
+  //   dispatch(addNewemployerAddressProof(proofResponse.data))
+  //   setProofUpdateListener(false);
+  }catch(error){
+    console.log(error)
+    setProofOfAddressListener(false);
+  }
+  setProofOfAddress(!proofOfAddress)
+}
+
+
+
+const handleDeleteAddressProof = async(proofId)=>{
+  try {
+    const deleteProof = await axios.delete(`${deleteProofURL}/${proofId}`, {withCredentials: true})
+    dispatch(removeAnemployerAddressProof(deleteProof.data))
+  } catch (error) {
+    
+  }
+}
+
 
 // Navigate to applicants page
+
   const handleApplicant = (jobId) => {
     navigate(`/${jobId}/jobApplicants`);
   };
@@ -270,9 +426,59 @@ const handleAvatar = async(e)=>{
           </form>
         </section>
 
+
+        {/* ------------------Proof of existance------------------- */}
+        <section className="bg-white shadow rounded-lg p-6 my-10">
+          {proofOfOwnerShip && <ProofOfExistenceModal toggle={toggleAddProof} handleImage={handleProofImage} send={handleSendProof} sending={proofUpdateListener} change={handleProofData}/>}
+          <h2 className="text-xl font-semibold mb-4">Proof of existence</h2>
+          
+          {/* -----version 1---- */}
+          <div className="flex gap-10 items-center justify-center flex-wrap">
+          {employerProofData.map((eachProof, index) => {
+            if (typeof eachProof.image === 'string' && !eachProof.image.startsWith('blob:') && !fetchedImages[eachProof._id]) {
+              fetchImage(eachProof._id, eachProof.image);
+            }
+            return (                
+              <div key={eachProof._id} className="sm:w-1/4 w-2/3 cursor-pointer h-fit rounded-t-md overflow-hidden">
+                <div className="relative group">
+                  <img 
+                    className="w-full h-72 object-cover" 
+                    src={fetchedImages[eachProof._id] || eachProof.image} 
+                    alt={`organization premises ${index + 1}`} 
+                  />
+                  <div className="bg-black text-white border-2 h-14">
+                    <h2 className="text-xl">{eachProof.title}</h2>
+                    <p className="text-sm">{eachProof.description}</p>
+                  </div>
+                </div>
+                <button className="px-4 mt-2 py-2 bg-red-500 text-white rounded-sm" onClick={()=>{handleDeleteProof(eachProof._id)}}>Delete</button>
+              </div>
+            );
+          })}
+          </div>
+          <div>
+            <button onClick={toggleAddProof} className="rounded-sm px-6 py-2 bg-green-500 text-white mt-2">Add More</button>
+          </div>
+        </section>
+
+
+        {/* ----------------Proof of address----------------- */}
+        <section className="bg-white shadow rounded-lg p-6 my-8">
+          <h2 className="text-xl font-semibold mb-4">Proof of address</h2>
+          {employerAddressProofData?.map((eachProof)=>{
+            return(
+              <div>
+                <h1>Proof of address</h1>
+                <button onClick={handleDeleteAddressProof}>Delete</button>
+              </div>
+            )
+          })}
+          {proofOfAddress && <ProofOfAddressModal toggle={toggleAddAddress} handleImage={handleAddressProofImage} send={handleSendAddressProof} sending={proofOfAddressListener} change={handleAddressProofData}/>}
+          <button onClick={toggleAddAddress} className="rounded-sm px-6 py-2 bg-green-500 text-white mt-2">Add More</button>
+        </section>
+
         {/* ---------------Job listing------------------*/}
-        <section className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Job Listings</h2>
+        <section className="bg-white shadow rounded-lg p-6 my-8">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead>
@@ -302,6 +508,8 @@ const handleAvatar = async(e)=>{
             </table>
           </div>
         </section>
+
+
         <section className="bg-white shadow rounded-lg p-6 mt-8">
           <h2 className="text-xl font-semibold mb-4">History log</h2>
           <div className="w-full flex items-center justify-between mb-2 text-lg font-semibold">

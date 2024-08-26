@@ -3,7 +3,6 @@ import { customError, errorHandler } from "./errorHandler.js"
 
 export const verifyUserToken = (req,res,next)=>{
     const token = req.signedCookies.access_token
-    console.log({cookie: req.signedCookies})
     const jwtSecret = process.env.secret || "weAreEssential"
     if(!token){
         next(customError(401, "UnAuthorized"))

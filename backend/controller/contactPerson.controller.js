@@ -32,6 +32,7 @@ export const createContactPerson = async (req, res, next) => {
     })
     res.status(200).json(saveContact);
   } catch (error) {
+    console.log(error)
     next(error);
   }
 };

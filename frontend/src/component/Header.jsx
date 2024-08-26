@@ -29,6 +29,7 @@ function Header({ lightMode }) {
     } else if (loggedInUser.currentUser?.userType === 'jobEmployer') {
       toast.info('Not eligible');
     } else {
+      toast.info('Signin to continue')
       navigate('/signin');
     }
   };
@@ -49,7 +50,7 @@ function Header({ lightMode }) {
   ];
 
   return (
-    <header className={`relative p-5 w-full z-50 font-poppins ${lightMode ? 'text-slate-100' : 'text-slate-900'}`}>
+    <header className={`relative transition-all  duration-500 p-5 w-full z-50 font-poppins ${lightMode ? 'text-slate-100' : 'text-slate-900'}`}>
       <div className="flex items-center justify-between gap-20">
         <Link to="/">
           <img className="sm:w-52 w-32 h-8 object-contain" src={Logo} alt="eJobs Logo" />
@@ -62,9 +63,9 @@ function Header({ lightMode }) {
         />
 
         {/* Desktop navigation */}
-        <nav className="hidden sm:flex items-center space-x-4">
+        <nav className="hidden sm:flex sm:gap-5 gap-2 items-center space-x-4">
           {menuItems.map((item) => (
-            <li key={item.label} className="font-semibold list-none text-sm uppercase">
+            <li key={item.label} className="font-semibold hover:bg-orange-400 px-4 py-2 hover:text-white list-none text-sm uppercase">
               {item.link ? (
                 <Link to={item.link}>{item.label}</Link>
               ) : (
@@ -75,14 +76,15 @@ function Header({ lightMode }) {
         </nav>
 
         {/* User profile or sign-in link */}
+        
         {loggedInUser.currentUser ? (
-          <div className="hidden sm:block relative">
+          <div className="transition-all duration-500 hidden sm:block relative">
             <details className="flex flex-col gap-4 items-start justify-center">
               <summary className="list-none flex items-center gap-2 cursor-pointer">
                 <CgProfile className="w-6 h-6" />
                 <BiDownArrow className="text-current" />
               </summary>
-              <div className="absolute bg-white text-gray-900 px-4 rounded-sm py-2 top-10 right-0 w-40">
+              <div className="absolute bg-white border-1.5 border-gray-400 text-gray-900 px-4 rounded-sm py-2 top-10 right-0 w-40">
                 <Link
                   to={loggedInUser.currentUser.userType === 'jobSeeker' 
                     ? `/profile/${loggedInUser.currentUser._id}` 
@@ -132,7 +134,7 @@ function Header({ lightMode }) {
             </li>
           ))}
           {loggedInUser.currentUser && (
-            <>
+            <div>
               <Link
                 to={loggedInUser.currentUser.userType === 'jobSeeker' 
                   ? `/profile/${loggedInUser.currentUser._id}` 
@@ -155,7 +157,7 @@ function Header({ lightMode }) {
               >
                 Logout
               </button>
-            </>
+            </div>
           )}
           {!loggedInUser.currentUser && (
             <Link to="/signin" className="font-semibold uppercase" onClick={() => setShowNav(false)}>

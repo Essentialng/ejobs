@@ -40,7 +40,6 @@ import Technology from '../assets/Images/technology.jpg'
 import Finance from '../assets/Images/finance.jpg'
 import Entertainment from '../assets/Images/entertainment2.jpg'
 import Entertainment2 from '../assets/Images/entertainment.jpg'
-// import SampleImage2 from "../assets/Images/nightCompany.jpg";
 
 
 // -----------React hooks collection--------------------
@@ -49,6 +48,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // ------------Dependencies collection-------------------
 import axios from "axios";
+import qs from 'query-string'
 
 // -------------Redux reducers---------------------------
 import { fetchinfJobFailure, fetchingJobStart, fetchingJobSuccess } from "../redux/jobList/jobListSlice";
@@ -56,7 +56,13 @@ import { fetchinfJobFailure, fetchingJobStart, fetchingJobSuccess } from "../red
 // -------------Data collection----------------------------
 import CounterCard from "../component/CounterCard";
 import { PiBriefcaseBold, PiFactoryDuotone } from "react-icons/pi";
-import { workTypes } from "../assets/jobData";
+import { nigeriaStates, workTypes } from "../assets/jobData";
+import { toast } from "react-toastify";
+import { Carousel } from "flowbite-react";
+import ApplicationStepContainer from "./ApplicationStepContainer";
+import { aboutData } from "../assets/homepageData";
+import AboutContainer from "./AboutContainer";
+
 
 
 function Homepage() {
@@ -68,7 +74,7 @@ function Homepage() {
   const [selectedJobs, setSelectedJobs] = useState([])
   const [activeJob, setActiveJob] = useState('full time')
   const allNotifications = useSelector(state=>state.notification.notificationList)
-  const allJobURL = `${apiRoute}job/allJob`;
+  const allJobURL = `${apiRoute}job/allJob?title=software%20engineering&lenght=10`;
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({})
   const navigate = useNavigate()
@@ -80,8 +86,9 @@ function Homepage() {
   const itemsPerPage = 2;
   const [totalJobs, setTotalJobs] = useState(allJob.length);
 
-  // --------data-----------
-const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
+  // -----------Scroll animation-----------------
+
+
 
   // --------Fetch all jobs----------
   useEffect(() => {
@@ -105,10 +112,12 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
   
 
 
+  // ----------handle transition motion----------------
+
+
+
 
   // -----------------Pagination system---------------
-
-  
   const totalPages = Math.ceil(paginatedJob?.length / itemsPerPage)
 
 
@@ -153,41 +162,40 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
     setTotalJobs(filteredJobs.length);
     performPagination(1, filteredJobs);
   };
-  
-
-  
-
-  // ----------Handle Homesearch------------
-  const handleHomeSearch = (e)=>{
-    e.preventDefault()
-    if(formData.workType && !formData.jobTitle && !formData.state){
-      setSelectedJobs(allJob.filter(eachJob=>eachJob.workType === formData.workType))
-    }else if(!formData.workType && formData.jobTitle && !formData.state){
-      setSelectedJobs(allJob.filter(eachJob=>eachJob.jobTitle === formData.jobTitle))
-    }else if(!formData.workType && !formData.jobTitle && formData.state){
-      setSelectedJobs(allJob.filter(eachJob=>eachJob.state === formData.state))
-    }else if(formData.workType && formData.jobTitle && !formData.state){
-      setSelectedJobs(allJob.filter(eachJob=>eachJob.workType === formData.workType && eachJob.jobTitle === formData.jobTitle))
-    }else if(formData.workType && !formData.jobTitle && formData.state){
-      setSelectedJobs(allJob.filter(eachJob=>eachJob.workType === formData.workType && eachJob.state === formData.state))
-    }else if(!formData.workType && formData.jobTitle && formData.state){
-      setSelectedJobs(allJob.filter(eachJob=>eachJob.jobTitle === formData.jobTitle && eachJob.state === formData.state))
-    }
-    navigate('#jobResult')
-  }
 
 
   // -----------Handle scroll-------------
-  const handleScroll = (e)=>{
-    e.preventDefault()
-    searchSection.current.scrollIntoView()
-  }
+  const handleFind = (e) => {
+    e.preventDefault();
+    
+  
+    const { jobTitle, workType, state } = formData;
+  
+    if (!jobTitle && !workType && !state) {
+      return toast.error('Kindly fill the search fields');
+    }
+  
+    const queryParams = {
+      ...(jobTitle && { jobTitle }),
+      ...(state && { state }),
+      ...(workType && { workType })
+    };
+
+    const queryString = qs.stringify(queryParams);
+    
+  
+    navigate(`/jobs?${queryString}`);
+  };
 
 
   // ----------Handle changes----------------
-  const handleChange = (e)=>{
-    setFormData({...formData, [e.target.name]:e.target.value})
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
 
 
   return (
@@ -233,44 +241,50 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
         
         <form className="flex flex-col items-center gap-4 w-full sm:w-3/5 bg-white p-6 rounded-lg shadow-lg">
           <div className="flex gap-4 mb-4">
-            <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
+            <p className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
               FIND A JOB
-            </button>
-            <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
+            </p>
+            <p className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">
               FIND A CANDIDATE
-            </button>
+            </p>
           </div>
           
           <input
-            className="p-2 mb-4 text-gray-600 w-full border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
-            type="text"
-            placeholder="e.g., Web Developer"
-            onChange={handleChange}
-            name="jobTitle"
-          />
-          <select
-            onChange={handleChange}
-            className="p-2 mb-4 w-full text-gray-600 border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
-            name="workType"
-          >
-            <option disabled>Category</option>
-            {
-              workTypes.map((eachType, index)=>{
-                return(
-                  <option value={eachType.toLocaleLowerCase()}>{eachType}</option>
-                )
-              })
-            }
-          </select>
-          <input
-            onChange={handleChange}
-            className="p-2 text-gray-600 mb-4 w-full border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
-            type="text"
-            name="state"
-            placeholder="Location: Lagos"
-          />
+          className="p-2 mb-4 text-gray-600 w-full border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
+          type="text"
+          placeholder="e.g., Web Developer"
+          onChange={handleChange}
+          name="jobTitle"
+          id='jobTitle'
+        />
+
+        <select
+          onChange={handleChange}
+          className="p-2 mb-4 w-full text-gray-600 border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
+          name="workType"
+          id="workType"
+        >
+          <option value="">Category</option>
+          {workTypes.map((eachType, index) => (
+            <option key={index} value={eachType}>{eachType}</option>
+          ))}
+        </select>
+
+        <select
+          onChange={handleChange}
+          className="p-2 text-gray-600 mb-4 w-full border-2 border-gray-300 rounded-md outline-none focus:border-orange-500 transition-colors"
+          name="state"
+          id="state"
+        >
+          <option value="">State</option>
+          {nigeriaStates.map((eachState, index) => (
+            <option key={index} value={eachState}>{eachState}</option>
+          ))}
+        </select>
+
+
           <button
-            onClick={handleScroll}
+            onClick={handleFind}
             className="bg-orange-500 px-6 py-2 text-white rounded-md hover:bg-orange-600 transition-colors"
           >
             Search
@@ -295,49 +309,52 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
 
 
 {/* -------------------Job by job category------------------------- */}
-<section className="my-20 w-full sm:px-20 px-5">
-  <h1 className="text-3xl font-bold text-center uppercase mb-4 text-gray-800">
+<section className="my-20 w-full px-5 sm:px-20 py-16 bg-gray-50">
+  <h1 className="text-4xl font-extrabold text-center uppercase mb-6 text-gray-900">
     Popular Job Categories
   </h1>
-  <p className="text-center text-gray-600 mb-8">
-    By utilizing our paid job listing, your jobs are displayed to more applicants and you can alter or bring down your job posting whenever it suits you. joblink.ng is by a wide margin, the most visited job platform in Nigeria, and posting your occupation on our website gives it more openness than some other job sites in Nigeria.
+  <p className="text-center text-gray-700 mb-10 max-w-2xl mx-auto">
+    By utilizing our paid job listing, your jobs are displayed to more applicants. Joblink.ng is the most visited job platform in Nigeria, ensuring your job postings gain the maximum exposure.
   </p>
-  <ul className="flex items-center justify-center gap-6 flex-wrap">
+  <ul className="flex flex-wrap justify-center gap-8">
     {[
-      { category: "Administrative assistant", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Administrative assistant".toLocaleLowerCase()).length },
-      { category: "Compliance officer", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Compliance officer".toLocaleLowerCase()).length },
-      { category: "Business development", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Business development".toLocaleLowerCase()).length },
-      { category: "Health service manager", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Health service manager".toLocaleLowerCase()).length },
-      { category: "Management consultant", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Management consultant".toLocaleLowerCase()).length },
-      { category: "Purchasing", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Purchasing".toLocaleLowerCase()).length },
-      { category: "Trade Union Officials", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Trade Union Officials".toLocaleLowerCase()).length },
-      { category: "Software engineer", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Software engineer".toLocaleLowerCase()).length },
-      { category: "Receptionist", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Receptionist".toLocaleLowerCase()).length },
-      { category: "Secretary", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Secretary".toLocaleLowerCase()).length },
-      { category: "Auditing and Accounting", count: allJob.filter(eachJob=>eachJob.jobTitle.toLocaleLowerCase() === "Auditing and Accounting".toLocaleLowerCase()).length },
+      { category: "Administrative assistant", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Administrative assistant".toLocaleLowerCase()).length },
+      { category: "Compliance officer", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Compliance officer".toLocaleLowerCase()).length },
+      { category: "Business development", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Business development".toLocaleLowerCase()).length },
+      { category: "Health service manager", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Health service manager".toLocaleLowerCase()).length },
+      { category: "Management consultant", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Management consultant".toLocaleLowerCase()).length },
+      { category: "Purchasing", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Purchasing".toLocaleLowerCase()).length },
+      { category: "Trade Union Officials", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Trade Union Officials".toLocaleLowerCase()).length },
+      { category: "Software engineer", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Software engineer".toLocaleLowerCase()).length },
+      { category: "Receptionist", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Receptionist".toLocaleLowerCase()).length },
+      { category: "Secretary", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Secretary".toLocaleLowerCase()).length },
+      { category: "Auditing and Accounting", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Auditing and Accounting".toLocaleLowerCase()).length },
     ].map((item, index) => (
       <li key={index}>
         <Link
-          className="text-gray-800 hover:text-blue-600 font-medium"
+          className="text-lg text-gray-800 hover:text-indigo-600 font-medium transition-colors"
           to={`/searchByCategory/${item.category}`}
         >
-          {item.category} ({item.count})
+          {item.category} <span className="text-sm text-gray-500">({item.count})</span>
         </Link>
       </li>
     ))}
   </ul>
 </section>
 
+{/* -------------------Job by job category------------------------- */}
+
 
 {/* --------------------Job by location----------------------- */}
-  <section className="my-20 sm:px-20 px-5">
-    <h1 className="text-3xl font-bold text-center uppercase mb-4 text-gray-800">
-      Job By Location
-    </h1>
-    <p className="text-center text-gray-600 mb-6">
-      We provide you jobs even at the proximity of your location and place of choice and convenience.
-    </p>
-    <ul className="flex items-center justify-center flex-wrap gap-6">
+
+<section className="my-20 bg-orange-50 py-16 px-5 sm:px-20">
+  <h1 className="text-4xl font-extrabold text-center uppercase mb-6 text-gray-900">
+    Job By Location
+  </h1>
+  <p className="text-center text-gray-700 mb-10 max-w-2xl mx-auto">
+    We provide you with jobs even at the proximity of your location and place of choice and convenience.
+  </p>
+  <ul className="flex flex-wrap justify-center gap-8">
     {[
       { location: "lagos", label: "Lagos" },
       { location: "anambra", label: "Anambra" },
@@ -356,17 +373,20 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
       { location: "imo", label: "Imo" },
       { location: "oyo", label: "Oyo" },
     ].map((item, index) => (
-      <li key={index} className="text-gray-800 hover:text-blue-600">
+      <li key={index} className="text-gray-900 hover:text-indigo-600 transition-colors">
         <Link
           to={`/searchByLocation/${item.location}`}
-          className="text-md font-medium"
+          className="text-lg font-medium"
         >
-          {item.label} ({allJob.filter(eachJob => eachJob.state.toLowerCase() === item.location).length})
+          {item.label} <span className="text-sm text-gray-500">({allJob.filter(eachJob => eachJob.state.toLowerCase() === item.location).length})</span>
         </Link>
       </li>
     ))}
   </ul>
 </section>
+
+
+{/* --------------------Job by location----------------------- */}
 
 {/* ---------------Advert section---------------- */}
 <section className="sm:px-20 px-5">
@@ -375,41 +395,24 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
 
      
 {/* --------------How we work section----------------- */}
-<section className="my-20 sm:px-20 px-5">
-  <h1 className="text-3xl font-bold text-center text-gray-800 border-b-2 border-orange-500 pb-2 mb-8">
-    How It Works
-  </h1>
-  <p className="text-center text-gray-600 mb-8">
-    Post your job to let us know what you are searching for, with simple-to-use job description layouts and eJobs will connect you with relevant and qualified candidates. With your job post on eJobs, it can be promoted through emails, notifications, and mobile alerts, making it easier for job seekers to find and apply for your position.
-  </p>
 
-  <div className="flex flex-col sm:flex-row items-start justify-center gap-12">
-    <ApplicationSteps
-      logo={<VscAccount className="w-14 h-14 text-orange-500" />}
-      title="Register an Account"
-      content="Connect with numerous companions, personnel, artisans, employed, unemployed, and general opportunities in your surroundings on eJobs."
-    />
-    <ApplicationSteps
-      logo={<FaSearch className="w-14 h-14 text-orange-500" />}
-      title="Search for Jobs"
-      content="We have been working hard to enhance your experience, making it easier for you to find the right job fit."
-    />
-    <ApplicationSteps
-      logo={<FaHandshake className="w-14 h-14 text-orange-500" />}
-      title="Apply for Jobs"
-      content="Explore a vast network of companies, organizations, and users to connect with numerous opportunities and advance your career."
-    />
-  </div>
-</section>
+{/* --------------- */}
+<ApplicationStepContainer/>
+{/* --------------- */}
+
+{/* -------------Vide section--------------- */}
 
 <section className="my-20 sm:px-20 px-5">
-  <div className="flex items-center justify-between mb-6 text-sm w-full max-w-5xl mx-auto">
-    <h2 className="text-2xl font-semibold text-gray-800">Short Videos</h2>
-    <Link to="/videos" className="text-lg text-blue-600 hover:underline">
+  <div className="flex items-center justify-between mb-6 w-full max-w-5xl mx-auto">
+    <h2 className="text-3xl font-bold text-gray-900">Short Videos</h2>
+    <Link
+      to="/videos"
+      className="text-lg text-blue-600 hover:text-blue-800 transition-colors duration-300"
+    >
       See All
     </Link>
   </div>
-  <div className="flex w-full flex-wrap items-center justify-center gap-4">
+  <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-0">
     <HomevideoComponent source={Video1} likes="203" views="5,345" />
     <HomevideoComponent source={Video2} likes="203" views="5,345" />
     <HomevideoComponent source={Video3} likes="203" views="5,345" />
@@ -417,47 +420,54 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
   </div>
 </section>
 
+{/* -------------Vide section--------------- */}
+
+
+
 {/* ----------------Choices Section------------------- */}
 <section className="my-20 sm:px-20 px-5 border-t-4 py-4 border-b-4 border-orange-500">
-              <h2 className="text-xl font-semibold mb-2">Our Other Choices</h2>
-              <div className="flex items-center justify-center flex-wrap gap-8">
-                <OtherChoices
-                  choiceImage={Technology}
-                  title="Technology"
-                  content="Encompasses businesses focused on the development, production, and distribution of technology products and services, including software, hardware, and IT services. This industry drives innovation and includes major segments like computing, telecommunications, and electronics"
-                />
-                <OtherChoices
-                  choiceImage={Health}
-                  title="HealthCare"
-                  content="Involves organizations and professionals that provide medical services, manufacture medical equipment or drugs, and facilitate the provision of healthcare to patients. It includes hospitals, pharmaceutical companies, and biotechnology firms."
-                />
-                <OtherChoices
-                  choiceImage={Finance}
-                  title="Finance"
-                  content="Comprises businesses that manage money, including banks, investment firms, insurance companies, and real estate firms. This industry is crucial for economic stability and growth, providing services like lending, investment, insurance, and financial planning."
-                />
-                <OtherChoices
-                  choiceImage={Entertainment}
-                  title="Entertainment"
-                  content="Encompasses businesses that produce and distribute entertainment content, such as movies, music, television, and video games, as well as news and information services. This industry plays a significant role in shaping culture and public opinion."
-                />
-                <OtherChoices
-                  choiceImage={Manufacturing}
-                  title="Manufacturing"
-                  content="Involves the production of goods using labor, machinery, and tools. This industry spans a wide range of products, from automobiles and electronics to textiles and food. Manufacturing is a backbone of industrialized economies, driving innovation and employment.
-"
-                />
-                <OtherChoices
-                  choiceImage={Energy}
-                  title="Energy"
-                  content="Consists of businesses involved in the production and distribution of energy, including fossil fuels (oil, gas, coal), nuclear power, and renewable energy sources (solar, wind, hydro). It is essential for powering homes, businesses, and transportation systems."
-                />
-              </div>
-            </section>
+  <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Our Other Choices</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <OtherChoices
+      choiceImage={Technology}
+      title="Technology"
+      content="Encompasses businesses focused on the development, production, and distribution of technology products and services, including software, hardware, and IT services. This industry drives innovation and includes major segments like computing, telecommunications, and electronics."
+    />
+    <OtherChoices
+      choiceImage={Health}
+      title="HealthCare"
+      content="Involves organizations and professionals that provide medical services, manufacture medical equipment or drugs, and facilitate the provision of healthcare to patients. It includes hospitals, pharmaceutical companies, and biotechnology firms."
+    />
+    <OtherChoices
+      choiceImage={Finance}
+      title="Finance"
+      content="Comprises businesses that manage money, including banks, investment firms, insurance companies, and real estate firms. This industry is crucial for economic stability and growth, providing services like lending, investment, insurance, and financial planning."
+    />
+    <OtherChoices
+      choiceImage={Entertainment}
+      title="Entertainment"
+      content="Encompasses businesses that produce and distribute entertainment content, such as movies, music, television, and video games, as well as news and information services. This industry plays a significant role in shaping culture and public opinion."
+    />
+    <OtherChoices
+      choiceImage={Manufacturing}
+      title="Manufacturing"
+      content="Involves the production of goods using labor, machinery, and tools. This industry spans a wide range of products, from automobiles and electronics to textiles and food. Manufacturing is a backbone of industrialized economies, driving innovation and employment."
+    />
+    <OtherChoices
+      choiceImage={Energy}
+      title="Energy"
+      content="Consists of businesses involved in the production and distribution of energy, including fossil fuels (oil, gas, coal), nuclear power, and renewable energy sources (solar, wind, hydro). It is essential for powering homes, businesses, and transportation systems."
+    />
+  </div>
+</section>
+
+{/* ----------------Choices Section------------------- */}
+
+
 
 
     {/* ------------Job search section------------- */}
-        <search ref={searchSection} className="bg-slate-300 py-10 sm:px-20 px-5">
+        <search ref={searchSection} className="bg-slate-300 w-full py-10 sm:px-20 px-5">
           <div className="">
             <h1 className="my-4 text-slate-600 border-b-2 w-fit mx-auto text-2xl border-orange-500">
               Find Jobs
@@ -478,32 +488,32 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
               Full Time
             </button>
           </div>
-    <section id="jobResult" className="sm:w-2/3 w-full mx-auto sm:px-20 px-5">
-      {paginatedJob && paginatedJob.map((eachJob, index) => (
-      <JobPostHomePage
-      key={index}
-      employerName={eachJob.employerName}
-      salary={eachJob.salary}
-      state={eachJob.state}
-      workType={eachJob.workType}
-      jobTitle={eachJob.jobTitle}
-      id={eachJob._id}
-    />
-  ))}
-  <div className="flex mb-10 items-center justify-center gap-2 border-2 w-fit border-slate-300 mx-auto">
-    <FaLessThan
-      onClick={handlePrevPage}
-      className="cursor-pointer text-slate-500 hover:text-orange-500"
-    />
-    <span>
-      Page {currentPage} of {totalPages}
-    </span>
-    <FaGreaterThan
-      onClick={handleNextPage}
-      className="cursor-pointer text-slate-500 hover:text-orange-500"
-    />
-  </div>
-</section>
+              <section id="jobResult" className="w-full mx-auto">
+                {paginatedJob && paginatedJob.map((eachJob, index) => (
+                <JobPostHomePage
+                key={index}
+                employerName={eachJob.employerName}
+                salary={eachJob.salary}
+                state={eachJob.state}
+                workType={eachJob.workType}
+                jobTitle={eachJob.jobTitle}
+                id={eachJob._id}
+              />
+            ))} 
+              <div className="flex mb-10 items-center justify-center gap-2 border-2 w-fit border-slate-300 mx-auto">
+                <FaLessThan
+                  onClick={handlePrevPage}
+                  className="cursor-pointer text-slate-500 hover:text-orange-500"
+                />
+                <span>
+                  Page {currentPage} of {totalPages}
+                </span>
+                <FaGreaterThan
+                  onClick={handleNextPage}
+                  className="cursor-pointer text-slate-500 hover:text-orange-500"
+                />
+              </div>
+          </section>
         </search>
 
 
@@ -514,78 +524,10 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
 
 
         {/* ----------------About section------------- */}
-  <section className="mt-10 py-10 sm:px-20 px-5">
-    <h2 className="text-3xl text-center font-bold mb-8 text-slate-800">Why Essential Jobs</h2>
-    <div className="flex items-center justify-center flex-wrap gap-4">
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-      <AboutComponent
-        logo={<FaBriefcase className="text-orange-500 text-3xl" />}
-        title="Search Millions of Jobs"
-        content="We know that searching for a job is a rollercoaster ride. We bring together over 2M unique, live jobs and job applicants just in one simple search."
-      />
-    </div>
-</section>
+          <AboutContainer/>
 
+  {/* -------------About section-------------- */}
 
-{/* -------------Group Section--------------- */}
-{/* <section className="mt-16 mb-20 sm:px-20 px-5">
-  <div className="flex items-center justify-between mb-6">
-    <h3 className="text-2xl font-semibold text-slate-800">Groups You May Like</h3>
-    <Link className="font-semibold text-orange-500 hover:text-orange-600 transition-colors">
-      See More
-    </Link>
-  </div>
-  <div className="flex flex-wrap gap-6 items-center justify-center">
-    <CategoryComponent
-      categoryImage={Energy}
-      categoryTitle="IT News"
-      categoryMember="1"
-      categoryPost="0"
-    />
-    <CategoryComponent
-      categoryImage={Technology}
-      categoryTitle="Tech Group"
-      categoryMember="1"
-      categoryPost="0"
-    />
-    <CategoryComponent
-      categoryImage={SampleImage}
-      categoryTitle="Group"
-      categoryMember="1"
-      categoryPost="0"
-    />
-    <CategoryComponent
-      categoryImage={Entertainment}
-      categoryTitle="Essential Staff"
-      categoryMember="1"
-      categoryPost="0"
-    />
-  </div>
-</section> */}
 
 
 {/* --------------Product Section----------------- */}
@@ -623,26 +565,33 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
 </section>
         
   {/* -------------------Testimonial Page-------------------- */}
-        <section className="bg-slate-300 my-20 sm:px-20 py-10">
-          <h3 className="mx-auto my-8 text-xl font-semibold border-b-2 border-orange-500 w-fit">Happy Employers</h3>
-          <div className="flex items-center flex-col justify-center">
-            <TestimonialComponent
-              customerName={`${testimonialData[currentTestimonial]} Micheal`}
-              customerTitle="creative director essential ltd"
-              customerTestimonial="Conceiving and implementing concepts, guidelines and strategies in various creative projects and overseeing them ..."
-            />  
-            <div className="flex items-center justify-center">
-            {[1,2,3,4].map((eachDot, index)=>{
-              return(
-                <div
-                key={index}
-                className="w-8 h-1 bg-slate-400 cursor-pointer hover:bg-slate-200"
-                ></div>
-              )
-            })}
-          </div>
-        </div>
-        </section>
+  <section className="bg-slate-300 my-20 sm:px-20 py-10">
+  <h3 className="mx-auto mb-8 text-xl font-semibold border-b-2 border-orange-500 w-fit">Happy Employers</h3>
+  <div className="h-56 sm:h-64 sm:w-[700px] mx-auto">
+      <Carousel pauseOnHover>
+      <TestimonialComponent
+        customerName={`Sarah Johnson`}
+        customerTitle="Software Engineer"
+        customerTestimonial="This platform has truly transformed my career. I was able to land my dream job in less than a month after signing up. The user interface is intuitive, and the job matching algorithm is incredibly accurate. I highly recommend this site to any professional looking for a new opportunity."
+       /> 
+      <TestimonialComponent
+        customerName={`Michael Rodriguez`}
+        customerTitle="Product Manager"
+        customerTestimonial="The variety of job listings on this site is unmatched. I appreciated the ability to filter roles based on my specific needs and preferences. The application process was seamless, and I received prompt feedback from potential employers. It's a fantastic resource for anyone in the tech industry."
+    /> 
+      <TestimonialComponent
+        customerName={`Emily chen`}
+        customerTitle="Data Scientist"
+        customerTestimonial="I was skeptical at first, but this job site exceeded all my expectations. The resources available for preparing for interviews and refining my resume were incredibly helpful. I found a position that aligns perfectly with my skills and career goals. Thank you for making job hunting stress-free!"
+      /> 
+      <TestimonialComponent
+        customerName={`Wale Onikulapo`}
+        customerTitle="UX/UI Designer"
+        customerTestimonial="As a designer, finding the right role can be challenging, but this platform made it easy. The job alerts feature ensured I never missed out on relevant opportunities, and the community forum provided valuable networking opportunities. I've recommended this site to all my colleagues."
+      />
+      </Carousel>
+    </div>
+</section>
 
 
 {/* ------------------Statistic Section-------------------- */}
@@ -650,26 +599,30 @@ const testimonialData = ['Musa', 'Niyi', 'Munachi', 'Sarah']
           style={{ backgroundImage: `url(${Manufacturing})` }}
           className="min-h-80 my-20 bg-black backdrop-filter flex flex-wrap items-center justify-center bg-cover sm:px-20 px-5"
         >
-          <div className="w-full flex flex-wrap items-center justify-center h-full gap-16">
+          <div className="sm:w-full overflow-x-auto flex flex-wrap items-center justify-center h-full gap-16">
             <StatisticsComponent
               Logo={<MdFactory />}
-              statisticNumber="49"
+              value="32"
               statisticTitle="Companies"
+              duration='2000'
             />
             <StatisticsComponent
               Logo={<BsDatabase />}
-              statisticNumber="49"
+              value="18"
               statisticTitle="Applications"
+              duration='2000'
             />
             <StatisticsComponent
               Logo={<BsBriefcase />}
-              statisticNumber="49"
+              value="40"
               statisticTitle="Job posted"
+              duration='2000'
             />
             <StatisticsComponent
               Logo={<BsPeople />}
-              statisticNumber="49"
+              value="32"
               statisticTitle="Members"
+              duration='2000'
             />
           </div>
         </section>
