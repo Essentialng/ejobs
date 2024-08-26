@@ -51,7 +51,7 @@ function App() {
     const interval = setInterval(()=>{
       const inactiveTime = Date.now() - lastActivity;
       if(inactiveTime > 30 * 60 * 1000){
-        axios.post('http://localhost:3003/api/v1/auth/signout', {withCredentials: true})
+        axios.post('http://13.92.179.121:3002/api/v1/auth/signout', {withCredentials: true})
        .then(res => {
         window.location.href = '/signin';
        })

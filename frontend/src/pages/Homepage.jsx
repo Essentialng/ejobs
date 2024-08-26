@@ -309,7 +309,7 @@ function Homepage() {
 
 
 {/* -------------------Job by job category------------------------- */}
-<section className="my-20 w-full px-5 sm:px-20 py-16 bg-gray-50">
+{/* <section className="my-20 w-full px-5 sm:px-20 py-16 bg-gray-50">
   <h1 className="text-4xl font-extrabold text-center uppercase mb-6 text-gray-900">
     Popular Job Categories
   </h1>
@@ -340,7 +340,7 @@ function Homepage() {
       </li>
     ))}
   </ul>
-</section>
+</section> */}
 
 {/* -------------------Job by job category------------------------- */}
 
