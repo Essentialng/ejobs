@@ -84,7 +84,7 @@ function Homepage() {
   const [paginatedJob, setPaginatedJob] = useState([]);
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 2;
-  const [totalJobs, setTotalJobs] = useState(allJob.length);
+  const [totalJobs, setTotalJobs] = useState(allJob?.length);
 
   // -----------Scroll animation-----------------
 
@@ -98,11 +98,11 @@ function Homepage() {
         const allJobs = await axios.get(allJobURL, {
           withCredentials: true,
         });
-        if (allJobs) dispatch(fetchingJobSuccess(allJobs.data));
-        setAllJob(allJobs.data);
-        setSelectedJobs(allJobs.data);
-        setTotalJobs(allJobs.data.length);
-        performPagination(currentPage, allJobs.data);
+        if (allJobs) dispatch(fetchingJobSuccess(allJobs?.data));
+        setAllJob(allJobs?.data);
+        setSelectedJobs(allJobs?.data);
+        setTotalJobs(allJobs?.data.length);
+        performPagination(currentPage, allJobs?.data);
       } catch (error) {
         dispatch(fetchinfJobFailure(error.message));
       }
@@ -149,13 +149,13 @@ function Homepage() {
     let filteredJobs;
     if (option === 'part time') {
       setActiveJob('part time');
-      filteredJobs = allJob.filter((job) => job.workType.toLowerCase() === 'part-time');
+      filteredJobs = allJob?.filter((job) => job.workType.toLowerCase() === 'part-time');
     } else if (option === 'full time') {
       setActiveJob('full time');
-      filteredJobs = allJob.filter((job) => job.workType.toLowerCase() === 'full-time');
+      filteredJobs = allJob?.filter((job) => job.workType.toLowerCase() === 'full-time');
     } else {
       setActiveJob('recent');
-      filteredJobs = [...allJob].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      filteredJobs = [...allJob]?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
     setSelectedJobs(filteredJobs);
     setCurrentPage(1);
@@ -318,17 +318,17 @@ function Homepage() {
   </p>
   <ul className="flex flex-wrap justify-center gap-8">
     {[
-      { category: "Administrative assistant", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Administrative assistant".toLocaleLowerCase()).length },
-      { category: "Compliance officer", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Compliance officer".toLocaleLowerCase()).length },
-      { category: "Business development", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Business development".toLocaleLowerCase()).length },
-      { category: "Health service manager", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Health service manager".toLocaleLowerCase()).length },
-      { category: "Management consultant", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Management consultant".toLocaleLowerCase()).length },
-      { category: "Purchasing", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Purchasing".toLocaleLowerCase()).length },
-      { category: "Trade Union Officials", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Trade Union Officials".toLocaleLowerCase()).length },
-      { category: "Software engineer", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Software engineer".toLocaleLowerCase()).length },
-      { category: "Receptionist", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Receptionist".toLocaleLowerCase()).length },
-      { category: "Secretary", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Secretary".toLocaleLowerCase()).length },
-      { category: "Auditing and Accounting", count: allJob.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Auditing and Accounting".toLocaleLowerCase()).length },
+      { category: "Administrative assistant", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Administrative assistant".toLocaleLowerCase()).length },
+      { category: "Compliance officer", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Compliance officer".toLocaleLowerCase()).length },
+      { category: "Business development", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Business development".toLocaleLowerCase()).length },
+      { category: "Health service manager", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Health service manager".toLocaleLowerCase()).length },
+      { category: "Management consultant", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Management consultant".toLocaleLowerCase()).length },
+      { category: "Purchasing", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Purchasing".toLocaleLowerCase()).length },
+      { category: "Trade Union Officials", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Trade Union Officials".toLocaleLowerCase()).length },
+      { category: "Software engineer", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Software engineer".toLocaleLowerCase()).length },
+      { category: "Receptionist", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Receptionist".toLocaleLowerCase()).length },
+      { category: "Secretary", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Secretary".toLocaleLowerCase()).length },
+      { category: "Auditing and Accounting", count: allJob?.filter(eachJob => eachJob.jobTitle.toLocaleLowerCase() === "Auditing and Accounting".toLocaleLowerCase()).length },
     ].map((item, index) => (
       <li key={index}>
         <Link
@@ -378,7 +378,7 @@ function Homepage() {
           to={`/searchByLocation/${item.location}`}
           className="text-lg font-medium"
         >
-          {item.label} <span className="text-sm text-gray-500">({allJob.filter(eachJob => eachJob.state.toLowerCase() === item.location).length})</span>
+          {item.label} <span className="text-sm text-gray-500">({allJob?.filter(eachJob => eachJob.state.toLowerCase() === item.location).length})</span>
         </Link>
       </li>
     ))}
