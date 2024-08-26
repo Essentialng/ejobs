@@ -128,7 +128,7 @@ pipeline {
                         server {
                             listen 80;
                             listen [::]:80;  # This line enables IPv6
-                            server_name https://ejobs.ooshinfo.com;
+                            server_name https://joblink.ng;
                             location / {
                                 proxy_pass http://13.92.179.121:3002;
                             }
