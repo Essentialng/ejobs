@@ -17,7 +17,7 @@ const VideoChat = () => {
         setStream(mediaStream);
         userVideo.current.srcObject = mediaStream;
 
-        socketRef.current = io.connect('http://localhost:3003');
+        socketRef.current = io.connect('http://13.92.179.121:3002');
 
         socketRef.current.emit('join-room', roomId, socketRef.current.id);
 
