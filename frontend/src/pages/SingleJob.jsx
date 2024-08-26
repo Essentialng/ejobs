@@ -26,6 +26,7 @@ function SingleJob() {
   // -----------states--------------
   const [jobDetails, setJobDetails]  = useState({})
   const [loadingReport, setLoadingReport] = useState(false)
+  const [similarJobs, setSimilarJobs] = useState([])
   const [jobReport, setJobReport] = useState({
     jobId: jobParam
   })
@@ -43,6 +44,14 @@ function SingleJob() {
     }
     getJobDetails()
   },[])
+
+
+  // -----------Similar jobs-------------
+  useEffect(()=>{
+    const topSimilarJobs = allJob.filter(eachJobs=>{
+      return (eachJobs.jobTitle === jobDetails.jobTitle).slice(0, 4)
+    })
+  },[allJob])
 
 
   const handleJobReport = async ()=>{
@@ -84,7 +93,7 @@ function SingleJob() {
             <div className="">
               {loggedInUser?.currentUser?.userType === 'jobSeeker' ? <button className="px-4 text-sm rounded-sm py-2 bg-blue-700 text-slate-50 font-semibold">
                 <Link to={`/job/apply/${jobDetails._id}`}>Apply</Link>
-              </button>: <Link to="/signin" className="px-4 text-sm rounded-sm py-2 bg-blue-700 text-slate-50 font-semibold">Signin To Apply</Link>}
+              </button>: <Link to="/signin" className="px-4 text-sm rounded-sm sm:py-2 py-1 w-fit bg-blue-700 text-slate-50 font-semibold">Signin</Link>}
             </div>
           </div>
           {/* End of logo area */}

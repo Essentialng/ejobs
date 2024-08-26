@@ -29,6 +29,7 @@ function Header({ lightMode }) {
     } else if (loggedInUser.currentUser?.userType === 'jobEmployer') {
       toast.info('Not eligible');
     } else {
+      toast.info('Signin to continue')
       navigate('/signin');
     }
   };
@@ -49,7 +50,7 @@ function Header({ lightMode }) {
   ];
 
   return (
-    <header className={`relative p-5 w-full z-50 font-poppins ${lightMode ? 'text-slate-100' : 'text-slate-900'}`}>
+    <header className={`relative transition-all  duration-500 p-5 w-full z-50 font-poppins ${lightMode ? 'text-slate-100' : 'text-slate-900'}`}>
       <div className="flex items-center justify-between gap-20">
         <Link to="/">
           <img className="sm:w-52 w-32 h-8 object-contain" src={Logo} alt="eJobs Logo" />
@@ -77,7 +78,7 @@ function Header({ lightMode }) {
         {/* User profile or sign-in link */}
         
         {loggedInUser.currentUser ? (
-          <div className="hidden sm:block relative">
+          <div className="transition-all duration-500 hidden sm:block relative">
             <details className="flex flex-col gap-4 items-start justify-center">
               <summary className="list-none flex items-center gap-2 cursor-pointer">
                 <CgProfile className="w-6 h-6" />

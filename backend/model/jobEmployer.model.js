@@ -39,7 +39,10 @@ const jobEmployerSchema = new Schema({
     },
     avatar:{
         type:String,
-        required:true,
+    },
+    proofOfCompany:{
+        type:[Schema.Types.ObjectId],
+        ref: "proofOfCompany"
     },
     phoneNumber:{
         type:String,
@@ -83,6 +86,18 @@ const jobEmployerSchema = new Schema({
         type:Boolean,
         default: false
     },
+    isVerified:{
+        type:Boolean,
+        default: false
+    },
+    lastLogin: {
+        type: Date,
+        default: Date.now
+    },
+    resetPasswordToken: String,
+    resetPaswordExpiresAt: Date,
+    verifyEmailToken: String,
+    verifyEmailExpiresAt: Date
 },{timestamps: true})
 
 const jobEmployerModel = mongoose.model('jobEmployer', jobEmployerSchema)

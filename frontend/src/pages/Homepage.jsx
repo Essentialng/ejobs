@@ -412,7 +412,7 @@ function Homepage() {
       See All
     </Link>
   </div>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-0">
     <HomevideoComponent source={Video1} likes="203" views="5,345" />
     <HomevideoComponent source={Video2} likes="203" views="5,345" />
     <HomevideoComponent source={Video3} likes="203" views="5,345" />
@@ -467,7 +467,7 @@ function Homepage() {
 
 
     {/* ------------Job search section------------- */}
-        <search ref={searchSection} className="bg-slate-300 py-10 sm:px-20 px-5">
+        <search ref={searchSection} className="bg-slate-300 w-full py-10 sm:px-20 px-5">
           <div className="">
             <h1 className="my-4 text-slate-600 border-b-2 w-fit mx-auto text-2xl border-orange-500">
               Find Jobs
@@ -488,7 +488,7 @@ function Homepage() {
               Full Time
             </button>
           </div>
-              <section id="jobResult" className="sm:w-2/3 w-full mx-auto sm:px-20 px-5">
+              <section id="jobResult" className="w-full mx-auto">
                 {paginatedJob && paginatedJob.map((eachJob, index) => (
                 <JobPostHomePage
                 key={index}

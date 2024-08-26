@@ -44,10 +44,10 @@ const ApplicationStepContainer = () => {
 
   return (
     <section className="my-20 sm:px-20 px-5">
-      <h1 className="text-3xl font-bold text-center text-gray-800 border-b-2 border-orange-500 pb-2 mb-8">
+      <h1 className="sm:text-3xl text-xl font-bold text-center text-gray-800 border-b-2 border-orange-500 pb-2 mb-8">
         How It Works
       </h1>
-      <p className="text-center text-gray-600 mb-8">
+      <p className="text-center text-gray-600 mb-8 sm:text-base text-sm">
         Post your job to let us know what you are searching for, with simple-to-use job description layouts and eJobs will connect you with relevant and qualified candidates. With your job post on eJobs, it can be promoted through emails, notifications, and mobile alerts, making it easier for job seekers to find and apply for your position.
       </p>
 

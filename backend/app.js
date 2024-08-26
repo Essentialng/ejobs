@@ -26,14 +26,19 @@ import BenefitRoute from './routes/benefitRoute/benefit.route.js'
 import EmployerReport from './routes/employerReport/employerReport.route.js'
 import EmployeeReport from './routes/employeeReport/employeeReport.route.js'
 import OfferRoute from './routes/jobsOffer/jobOffer.router.js'
-
+import ProofRoute from './routes/proofRoute/proofRoute.js'
+import AddressProofRoute from './routes/addressProof/addressProof.js'
+import OtherCandidatesRoutes from './routes/OtherCandidates/OtherCandidates.js'
+import ForgetPasswordRoute from './routes/forgetPasswordRoute/forgetPasswordRoute.js'
+import { getImage } from './utils/getImage.js';
 
 
 // -------Socket io configurations--------
 const app = express();
-app.use(express.json());
+app.use(express.json({limit: '10mb'}));
+app.use(express.urlencoded({extended: true, limit: '10mb'}))
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: ['http://13.92.179.121:3002'],
   credentials: true
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -42,26 +47,38 @@ app.use(morgan('dev'));
 
 // multer confiuration
 
-app.use('/api/v1/jobseeker', JobSeekerRouter);
-app.use('/api/v1/notification', NotificationRoute);
-app.use('/api/v1/jobrecruiter', JobEmployerRouter);
+
+// ----------All routes-----------
 app.use('/api/v1/job', JobRoute);
+app.use('/api/v1/notification', NotificationRoute);
 app.use('/api/v1/jobReport', JobReportRoute);
-app.use('/api/v1/offer', OfferRoute);
 app.use('/api/v1/auth', AuthRouter);
+app.use('/api/v1/interview', InterviewRoute);
+app.use('/api/v1/sendSMS', SMSRoute);
+app.use('/api/v1/getImage/:filename', getImage);
+app.use('/api/v1/otherCandidate', OtherCandidatesRoutes)
+app.use('/api/v1/forgetPasword', ForgetPasswordRoute)
+
+// ----------jobSeeker routes-----------
+app.use('/api/v1/jobseeker', JobSeekerRouter);
+app.use('/api/v1/offer', OfferRoute);
 app.use('/api/v1/application', ApplicationRoute);
-app.use('/api/v1/contactPerson', ContactPerson);
 app.use('/api/v1/education', EducationRoute);
 app.use('/api/v1/experience', ExperienceRoute);
 app.use('/api/v1/certificate', CertificateRoute);
 app.use('/api/v1/guarantor', GuarantorRoute);
-app.use('/api/v1/interview', InterviewRoute);
-app.use('/api/v1/sendMail', MailRoute);
-app.use('/api/v1/sendSMS', SMSRoute);
-app.use('/api/v1/hired', HiredRoute);
 app.use('/api/v1/benefit', BenefitRoute);
 app.use('/api/v1/employeeReport', EmployeeReport)
+
+// ----------jobEmployer routes-----------
+app.use('/api/v1/jobrecruiter', JobEmployerRouter);
+app.use('/api/v1/contactPerson', ContactPerson);
+app.use('/api/v1/sendMail', MailRoute);
+app.use('/api/v1/hired', HiredRoute);
 app.use('/api/v1/employerReport', EmployerReport)
+app.use('/api/v1/proof', ProofRoute)
+app.use('/api/v1/addressProof', AddressProofRoute)
+
 
 
 

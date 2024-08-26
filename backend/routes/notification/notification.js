@@ -3,7 +3,6 @@ import { verifyUserToken } from "../../middlewares/verifyToken.js"
 import { createNotification, getAllNotification, getANotification, getEmployerNotification } from "../../controller/notification.controller.js"
 
 const router = express.Router()
-console.log('route run')
 router.get("/getAllNotification", verifyUserToken, getAllNotification)
 router.post("/getANotification", verifyUserToken, getANotification)
 router.post("/getEmployerNotification", verifyUserToken, getEmployerNotification)

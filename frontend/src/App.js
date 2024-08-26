@@ -38,6 +38,7 @@ import ChatTwo from './pages/ChatTwo';
 import VerifyToken from './pages/VerifyToken';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import NewPassword from './pages/NewPassword';
 
 
 
@@ -220,6 +221,10 @@ function App() {
     {
       path: "/signup",
       element: <SignupPages/>
+    },
+    {
+      path: "/newPassword/:token/:userId",
+      element: <NewPassword/>
     }
   ])
   return (

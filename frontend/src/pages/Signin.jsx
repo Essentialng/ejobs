@@ -21,13 +21,15 @@ import { setSalaryRecievedList } from "../redux/salaryRecieved/salaryRecieved";
 import { setReportMadeList } from "../redux/reportMade/reportMadeSlice";
 import { setReportGottenList } from "../redux/reportGotten/reportGottenSlice";
 import { setEmployerProofList } from "../redux/employerProof/employerProofSlice";
-import { Modal } from "flowbite-react";
+import ForgetPassword from "../component/Modals/ForgetPassword";
+
 
 
 
 
 function SigninPages() {
     const baseURL = `${process.env.REACT_APP_API_URL}auth/signin`;
+    const forgetURL = `${process.env.REACT_APP_API_URL}forgetPasword/`
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         userType:'jobSeeker'
@@ -35,11 +37,44 @@ function SigninPages() {
     const { loading, error } = useSelector(state => state.user);
     const dispatch = useDispatch();
 
+
+    // ------forget password----------
+    const [forgetPasswordData, setForgetPasswordData] = useState({})
+    const [forgetPassowrd, setForgetPassword] = useState(false)
+    const [loadingForget, setLoadingForget] = useState(false)
+
+
     // ----------Handle form change-------------
     const handleChange = (e) => {
         dispatch(signinFailure(null));
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    // -----------handle forget form data----------
+    const handleForgetPasswordChange = (e) => {
+        e.preventDefault()
+        setForgetPasswordData({...forgetPasswordData, [e.target.name]: e.target.value });
+    };
+
+
+
+    // ----------Handle forget password-------------
+    const handleForgetPassword = async(e) => {
+        e.preventDefault()
+        setLoadingForget(true)
+        try {
+            await axios.post(forgetURL, forgetPasswordData, {withCredentials: true})
+            setLoadingForget(false)
+            setForgetPassword(!forgetPassowrd);
+        } catch (error) {
+            setLoadingForget(false)
+            console.log(error)
+        }
+    };
+
+const handleForgetPasswordToggle = ()=>{
+    setForgetPassword(!forgetPassowrd)
+}
 
 
 // ------------Handle signin----------------
@@ -158,7 +193,7 @@ function SigninPages() {
                     <div className="mt-4 text-center">
                         <p>Don't have an account? <Link className="text-blue-500 hover:underline" to='/signup'>Sign up</Link></p>
                     </div>
-                    <Link to='/forgetPassword'>Forget password</Link>
+                    <button className="text-blue-500 font-semibold text-base underline" onClick={handleForgetPasswordToggle}>Forget password</button>
                     <button 
                         className="w-full py-2 mt-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition duration-200"
                     >
@@ -166,6 +201,7 @@ function SigninPages() {
                     </button>
                 </form>
             </div>
+            {forgetPassowrd && <ForgetPassword change={(e)=>{handleForgetPasswordChange(e)}} click={handleForgetPassword} toggle={handleForgetPasswordToggle}/>}
         </div>
     );
 }

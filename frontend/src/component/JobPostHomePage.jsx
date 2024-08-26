@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function JobPostHomePage({employerName, salary, state, workType, experienceLength, jobTitle, jobDuration, id}) {
   return (
-    <div className="sm:p-10 p-5 text-black bg-slate-50 border-2 border-slate-300 rounded-md mb-4 relative overflow-hidden">
+    <div className="sm:p-10 p-5 w-full text-black bg-slate-50 border-2 border-slate-300 rounded-md mb-4 relative overflow-hidden">
         <div className="flex flex-col sm:flex-row items-start justify-between">
             <div className="bg-orange-500 z-10 absolute -top-[14px] -left-[65px] w-[200px] h-[100px] rotate-[314.5deg]">
             </div>
