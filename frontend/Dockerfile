@@ -1,9 +1,5 @@
 # Stage 1: Build the React application
-<<<<<<< HEAD
 FROM node:20 AS build
-=======
-FROM node:18 AS build
->>>>>>> updates
 
 # Set the working directory
 WORKDIR /app
@@ -20,7 +16,6 @@ COPY . .
 # Build the React application
 RUN npm run build
 
-<<<<<<< HEAD
 # Stage 2: Serve the React application with Node.js
 FROM node:20-alpine
 
@@ -38,9 +33,3 @@ EXPOSE 3002
 
 # Serve the application
 CMD ["serve", "-s", "build", "-l", "3002"]
-=======
-# Stage 2: Serve the application with Nginx
-FROM nginx:alpine
-
-# Copy the build output to
->>>>>>> updates
