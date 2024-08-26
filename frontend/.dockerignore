@@ -8,7 +8,7 @@ build/
 npm-debug.log*
 
 # Environment configuration
-# .env
+.env
 
 # OS-specific files
 .DS_Store
