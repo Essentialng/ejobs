@@ -51,6 +51,7 @@ function SingleJob() {
     const topSimilarJobs = allJob.filter(eachJobs=>{
       return (eachJobs.jobTitle === jobDetails.jobTitle).slice(0, 4)
     })
+    
   },[allJob])
 
 

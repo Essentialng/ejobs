@@ -56,6 +56,9 @@ function EmployeeProfile({ education, experience, certificate, guarantor }) {
     getUserWork();
   }, [ApplicantData.education]);
 
+
+
+
   // ---- Fetch user applicant Work experience
   useEffect(() => {
     const userWork = ApplicantData.workExperience;  
@@ -74,6 +77,9 @@ function EmployeeProfile({ education, experience, certificate, guarantor }) {
     };
     getUserWork();
   }, []);
+
+
+
 
   // ---- Fetch user applicant Certificate
   useEffect(() => {
@@ -95,6 +101,9 @@ function EmployeeProfile({ education, experience, certificate, guarantor }) {
     getUserCertificate();
   }, []);
 
+
+
+  
   // ---- Fetch user applicant Guarantor
   useEffect(() => {
     const userGuarantor = ApplicantData.guarantors;  

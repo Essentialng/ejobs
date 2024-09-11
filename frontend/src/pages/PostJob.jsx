@@ -393,6 +393,9 @@ const handleCategorySelection = (index, type, isPaid = false) => {
                   })}
                 </select>
               </div>
+
+
+              {/* states */}
               <div className="w-full my-2">
                 <label className="block my-2" htmlFor="state">
                   State
@@ -411,6 +414,9 @@ const handleCategorySelection = (index, type, isPaid = false) => {
                   })}
                 </select>
               </div>
+
+
+              {/* local government */}
               <div className="w-full my-2">
                 <label className="block my-2" htmlFor="localGovernment">
                   Local Government

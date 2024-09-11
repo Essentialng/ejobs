@@ -87,30 +87,6 @@ function Homepage() {
   const [totalJobs, setTotalJobs] = useState(allJob?.length);
 
   // -----------Scroll animation-----------------
-
-
-
-  // --------Fetch all jobs----------
-  // useEffect(() => {
-  //   const fetchJobs = async () => {
-  //     dispatch(fetchingJobStart());
-  //     try {
-  //       const allJobs = await axios.get(allJobURL, {
-  //         withCredentials: true,
-  //       });
-  //       if (allJobs) dispatch(fetchingJobSuccess(allJobs?.data));
-  //       setAllJob(allJobs?.data);
-  //       setSelectedJobs(allJobs?.data);
-  //       setTotalJobs(allJobs?.data.length);
-  //       performPagination(currentPage, allJobs?.data);
-  //     } catch (error) {
-  //       dispatch(fetchinfJobFailure(error.message));
-  //     }
-  //   };
-  //   fetchJobs();
-  // }, []);
-
-  // --------version2----------
   
   useEffect(() => {
     const fetchJobs = async () => {
