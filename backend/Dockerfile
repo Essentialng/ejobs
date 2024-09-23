@@ -2,7 +2,7 @@
 FROM node:20
 
 # Set environment variables for the application
-ENV MONGO_URL="mongodb+srv://deriver-essential:edriver-essential-password@edriver-cluster.nacqigi.mongodb.net/?retryWrites=true&w=majority&appName=edriver-cluster/EjobTesting" \
+ENV MONGO_URL="mongodb+srv://deriver-essential:edriver-essential-password@edriver-cluster.nacqigi.mongodb.net/EjobTesting?retryWrites=true&w=majority&appName=edriver-cluster" \
     PORT=3003 \
     SALT=15 \
     SECRET="iamwhatiam"
