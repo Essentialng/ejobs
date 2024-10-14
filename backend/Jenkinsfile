@@ -137,30 +137,57 @@ pipeline {
                 }
             }
         }
+        // stage('Setup Nginx for Frontend and Backend') {
+        //     steps {
+        //         sshagent(['vm-ssh-credentials']) {
+        //             sh '''
+        //             ssh DevSecOps_Admin@13.92.179.121 '
+        //                 # Update package lists and install Nginx & Certbot if not already installed
+        //                 sudo apt-get update &&
+        //                 sudo apt-get install -y nginx certbot python3-certbot-nginx &&
 
-        stage('Setup Nginx') {
-            steps {
-                sshagent(['vm-ssh-credentials']) {
-                    sh '''
-                    ssh DevSecOps_Admin@13.92.179.121 '
-                        sudo apt-get update &&
-                        sudo apt-get install -y nginx &&
-                        echo "
-                        server {
-                            listen 80;
-                            server_name https://ejobs_backend.ooshinfo.com;
-                            location / {
-                                proxy_pass http://13.92.179.121:3003;
-                            }
-                        }" | sudo tee /etc/nginx/sites-available/ejobs &&
-                        sudo ln -sf /etc/nginx/sites-available/ejobs /etc/nginx/sites-enabled/ &&
-                        sudo nginx -t &&
-                        sudo systemctl restart nginx
-                    '
-                    '''
-                }
-            }
-        }
+        //                 # Create or overwrite the server block for the domain
+        //                 echo "
+        //                 server {
+        //                     listen 80;
+        //                     listen [::]:80;
+        //                     server_name ejobs.com.ng;
+
+        //                     # Frontend configuration
+        //                     location / {
+        //                         proxy_pass http://localhost:3002;
+        //                         proxy_set_header Host \$host;
+        //                         proxy_set_header X-Real-IP \$remote_addr;
+        //                         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        //                         proxy_set_header X-Forwarded-Proto \$scheme;
+        //                     }
+
+        //                     # Backend configuration (served at /api)
+        //                     location /api/ {
+        //                         proxy_pass http://localhost:3003/;
+        //                         proxy_set_header Host \$host;
+        //                         proxy_set_header X-Real-IP \$remote_addr;
+        //                         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        //                         proxy_set_header X-Forwarded-Proto \$scheme;
+        //                     }
+        //                 }" | sudo tee /etc/nginx/sites-available/ejobs.com.ng &&
+
+        //                 # Enable the site
+        //                 sudo ln -sf /etc/nginx/sites-available/ejobs.com.ng /etc/nginx/sites-enabled/ejobs.com.ng &&
+
+        //                 # Test Nginx configuration
+        //                 sudo nginx -t &&
+
+        //                 # Reload Nginx to apply changes
+        //                 sudo systemctl reload nginx &&
+
+        //                 # Obtain or renew SSL certificate for the domain
+        //                 sudo certbot --nginx -d ejobs.com.ng --non-interactive --agree-tos -m your-email@example.com -n
+        //             '
+        //             '''
+        //         }
+        //     }
+        // }
 
         // stage('Setup Nginx') {
         //     steps {

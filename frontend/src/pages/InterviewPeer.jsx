@@ -147,6 +147,8 @@ function InterviewPeer() {
             <h2 className='bg-[rgba(255,_255,_255,_0.2)] rounded-xl [box-shadow:0_4px_30px_rgba(0,_0,_0,_0.1)] backdrop-filter backdrop-blur-[5px] border-[1px] border-[rgba(255,255,255,0.3)] text-white'>{name || "Name"}</h2>
           </div>
         )}
+
+        
         {/* -------interviewee stream------ */}
         <div className='bg-cover bg-gray-950 block w-screen h-screen'>
           {callAccepted && !callEnded && (
@@ -176,6 +178,8 @@ function InterviewPeer() {
               )}
             </div>
           </form>
+
+
           {/* -------Chat-------- */}
           <div className={`absolute bottom-10 right-5 w-1/3 text-sm h-2/3 bg-gray-200 ml-2 mt-2 rounded-sm ${openChat ? 'block' : 'hidden'}`}>
           <MdCancel className='text-red-500 cursor-pointer w-6 h-6' onClick={handleChat}/>

@@ -108,7 +108,7 @@ function JobPage() {
       <SearchComponent handleSearch={searchByFilter} handleChange={handleChange} />
       <div className="flex flex-col items-start text-sm justify-center sm:flex-row sm:px-24 px-4 gap-8">
         <div className="w-full sm:w-2/3">
-          {filteredJobs.map((eachJob) => (
+          {filteredJobs && filteredJobs.map((eachJob) => (
             <JobPostJobPage
               key={eachJob._id}
               position={eachJob.jobTitle}
@@ -131,7 +131,7 @@ function JobPage() {
           <button onClick={handleClearFilter} className="text-sm text-orange-500 hover:underline animate-bounce">Clear all</button>
         </div>
         <div className="flex flex-wrap items-center gap-4 py-4">
-          {filterList.map((filter, index) => (
+          {filterList && filterList.map((filter, index) => (
             <span key={index} className="relative px-4 py-2 bg-gray-200 text-gray-800 rounded-3xl">
               {filter.selectedElement}
               <MdCancel onClick={() => removeFilterElement(filter.selectedElement)} className="absolute text-red-300 cursor-pointer -top-2 right-0 hover:text-red-400" />
@@ -153,7 +153,7 @@ function JobPage() {
         <div className="space-y-3">
           <select name="jobFunction" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Job function</option>
-            {jobFunctions.map((func, index) => (
+            {jobFunctions && jobFunctions.map((func, index) => (
               <option key={index} value={func}>{func}</option>
             ))}
           </select>
@@ -161,7 +161,7 @@ function JobPage() {
 
           <select name="industry" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Industry</option>
-            {jobIndustries.map((industry, index) => (
+            {jobIndustries && jobIndustries.map((industry, index) => (
               <option key={index} value={industry}>{industry}</option>
             ))}
           </select>
@@ -169,7 +169,7 @@ function JobPage() {
 
           <select name="state" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Work type</option>
-            {workTypes.map((type, index) => (
+            {workTypes && workTypes.map((type, index) => (
               <option key={index} value={type}>{type}</option>
             ))}
           </select>
@@ -177,7 +177,7 @@ function JobPage() {
 
           <select name="workType" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Job Skills</option>
-            {jobSkills.map((skill, index) => (
+            {jobSkills && jobSkills.map((skill, index) => (
               <option key={index} value={skill}>{skill}</option>
             ))}
           </select>
