@@ -266,7 +266,7 @@ function Homepage() {
           id="workType"
         >
           <option value="">Category</option>
-          {workTypes.map((eachType, index) => (
+          {workTypes && workTypes.map((eachType, index) => (
             <option key={index} value={eachType}>{eachType}</option>
           ))}
         </select>
@@ -278,7 +278,7 @@ function Homepage() {
           id="state"
         >
           <option value="">State</option>
-          {nigeriaStates.map((eachState, index) => (
+          {nigeriaStates && nigeriaStates.map((eachState, index) => (
             <option key={index} value={eachState}>{eachState}</option>
           ))}
         </select>
