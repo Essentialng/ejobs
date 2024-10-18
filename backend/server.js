@@ -10,7 +10,7 @@ const connectionString = process.env.MONGO_URL || "mongodb://localhost:27017/ejo
 // ----------SocketIo setup-------------
 const io = new Server(server, {
   cors: {
-    origin: "http://13.92.179.121:3002",
+    origin: process.env.ENV === 'development' ? "localhost:3001" : "http://13.92.179.121:3002",
     methods: ["POST", "GET"],
   },
 });

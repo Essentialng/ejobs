@@ -38,7 +38,7 @@ const app = express();
 app.use(express.json({limit: '10mb'}));
 app.use(express.urlencoded({extended: true, limit: '10mb'}))
 app.use(cors({
-  origin: ['http://13.92.179.121:3002'],
+  origin: process.env.ENV === 'development' ? ['localhost:3001'] : ['http://13.92.179.121:3002'],
   credentials: true
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -46,7 +46,7 @@ app.use(cookieParser('secret'));
 app.use(morgan('dev'));
 
 // multer confiuration
-
+console.log(process.env.ENV)
 
 // ----------All routes-----------
 app.use('/api/v1/job', JobRoute);

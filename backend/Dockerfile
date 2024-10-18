@@ -5,7 +5,8 @@ FROM node:20
 ENV MONGO_URL="mongodb+srv://deriver-essential:edriver-essential-password@edriver-cluster.nacqigi.mongodb.net/EjobTesting?retryWrites=true&w=majority&appName=edriver-cluster" \
     PORT=3003 \
     SALT=15 \
-    SECRET="iamwhatiam"
+    SECRET="iamwhatiam" \
+    ENV="production"
 
 # Create and set the working directory
 WORKDIR /usr/src/app

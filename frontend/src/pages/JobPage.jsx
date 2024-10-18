@@ -13,6 +13,8 @@ function JobPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [allJobs, setAllJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filterList, setFilterList] = useState([]);
   const [mainSearchForm, setMainSearchForm] = useState({});
   const baseURL = `${apiRoute}job/allJob`;
@@ -23,14 +25,17 @@ function JobPage() {
 
   useEffect(() => {
     const getAllJobs = async () => {
+      setIsLoading(true);
       try {
         const fetchJobs = await axios.get(baseURL, {
           withCredentials: true
         });
         setAllJobs(fetchJobs.data);
         applyFilters(fetchJobs.data, { jobTitle, workType, state });
+        setIsLoading(false);
       } catch (error) {
-        setErrorMessage("Error fetching jobs");
+        setError("Error fetching jobs");
+        setIsLoading(false);
       }
     };
     getAllJobs();
@@ -107,21 +112,29 @@ function JobPage() {
       <Header darkMode={true} />
       <SearchComponent handleSearch={searchByFilter} handleChange={handleChange} />
       <div className="flex flex-col items-start text-sm justify-center sm:flex-row sm:px-24 px-4 gap-8">
-        <div className="w-full sm:w-2/3">
-          {filteredJobs && filteredJobs.map((eachJob) => (
-            <JobPostJobPage
-              key={eachJob._id}
-              position={eachJob.jobTitle}
-              companyName={eachJob.employerName}
-              location={eachJob.state}
-              salary={eachJob.salary}
-              jobType={eachJob.workType}
-              experience={eachJob.experienceLength}
-              duration={eachJob.vacancyDuration}
-              jobId={eachJob._id}
-              status="Apply now"
-            />
-          ))}
+      <div className="w-full sm:w-2/3">
+          {isLoading ? (
+            <p>Loading jobs...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : filteredJobs.length > 0 ? (
+            filteredJobs.map((eachJob) => (
+              <JobPostJobPage
+                key={eachJob._id}
+                position={eachJob.jobTitle}
+                companyName={eachJob.employerName}
+                location={eachJob.state}
+                salary={eachJob.salary}
+                jobType={eachJob.workType}
+                experience={eachJob.experienceLength}
+                duration={eachJob.vacancyDuration}
+                jobId={eachJob._id}
+                status="Apply now"
+              />
+            ))
+          ) : (
+            <p>No jobs found matching your criteria.</p>
+          )}
         </div>
     <div className="hidden w-1/3 sm:block text-sm">
       <div className="p-4 mb-10 text-sm border-2 border-gray-300 rounded-lg shadow-md">
@@ -131,7 +144,7 @@ function JobPage() {
           <button onClick={handleClearFilter} className="text-sm text-orange-500 hover:underline animate-bounce">Clear all</button>
         </div>
         <div className="flex flex-wrap items-center gap-4 py-4">
-          {filterList && filterList.map((filter, index) => (
+          {Array.isArray(filterList) && filterList.length && filterList?.map((filter, index) => (
             <span key={index} className="relative px-4 py-2 bg-gray-200 text-gray-800 rounded-3xl">
               {filter.selectedElement}
               <MdCancel onClick={() => removeFilterElement(filter.selectedElement)} className="absolute text-red-300 cursor-pointer -top-2 right-0 hover:text-red-400" />
@@ -153,7 +166,7 @@ function JobPage() {
         <div className="space-y-3">
           <select name="jobFunction" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Job function</option>
-            {jobFunctions && jobFunctions.map((func, index) => (
+            {Array.isArray(jobFunctions) && jobFunctions.length && jobFunctions.map((func, index) => (
               <option key={index} value={func}>{func}</option>
             ))}
           </select>
@@ -161,7 +174,7 @@ function JobPage() {
 
           <select name="industry" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Industry</option>
-            {jobIndustries && jobIndustries.map((industry, index) => (
+            {Array.isArray(jobIndustries) && jobIndustries.length && jobIndustries?.map((industry, index) => (
               <option key={index} value={industry}>{industry}</option>
             ))}
           </select>
@@ -169,7 +182,7 @@ function JobPage() {
 
           <select name="state" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Work type</option>
-            {workTypes && workTypes.map((type, index) => (
+            {Array.isArray(workTypes) && workTypes.length && workTypes?.map((type, index) => (
               <option key={index} value={type}>{type}</option>
             ))}
           </select>
@@ -177,7 +190,7 @@ function JobPage() {
 
           <select name="workType" onChange={addFilterElement} className="w-full p-2 border-2 border-gray-300 rounded-md outline-none focus:border-blue-500">
             <option value="" disabled selected>Job Skills</option>
-            {jobSkills && jobSkills.map((skill, index) => (
+            {Array.isArray(jobSkills) && jobSkills.length && jobSkills?.map((skill, index) => (
               <option key={index} value={skill}>{skill}</option>
             ))}
           </select>
